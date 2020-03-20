@@ -1,5 +1,6 @@
 package sh.platform.client;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -17,7 +18,15 @@ public class PlatformClientTest {
 
     @Test
     public void shouldReturnErrorWhenStart() {
-        assertThrows(PlatformClientException.class,
+        assertThrows(Exception.class,
                 () -> new PlatformClient("error_error"));
+    }
+
+    @Test
+    public void shouldStartProjects() {
+        PlatformClient client = new PlatformClient(token);
+        Projects projects = client.getProjects();
+        Assertions.assertNotNull(projects);
+
     }
 }

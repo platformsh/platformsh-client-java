@@ -9,6 +9,7 @@ import org.apache.http.conn.ssl.NoopHostnameVerifier;
 import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
+import org.apache.http.message.BasicHeader;
 
 import javax.net.ssl.SSLContext;
 import java.util.Map;
@@ -19,6 +20,7 @@ public class PlatformClient {
 
     private static final String DEFAULT_URL = "https://accounts.platform.sh/";
     private static final JsonMapper MAPPER = new JsonMapper();
+    static final BasicHeader JSON_HEADER = new BasicHeader("Content-Type", "application/json");
 
     private final String url;
 
@@ -36,6 +38,11 @@ public class PlatformClient {
         this.url = DEFAULT_URL;
         this.user = new AuthUser(requireNonNull(token, "token is required"));
         this.token = AuthToken.of(MAPPER, this.url + "oauth2/token", user);
+    }
+
+
+    public Projects getProjects() {
+        return Projects.of(MAPPER, this.url + "projects", token);
     }
 
 

@@ -12,6 +12,7 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
+import org.apache.http.message.BasicHeader;
 import org.apache.http.util.EntityUtils;
 
 import java.io.IOException;
@@ -32,7 +33,7 @@ public class AuthToken {
     private final String scope;
 
     @JsonCreator
-    public AuthToken(@JsonProperty("access_token") String token,
+    AuthToken(@JsonProperty("access_token") String token,
               @JsonProperty("expires_in") long expires,
               @JsonProperty("token_type") String type,
               @JsonProperty("scope") String scope) {
@@ -71,7 +72,7 @@ public class AuthToken {
 
     static AuthToken of(JsonMapper mapper, String url, AuthUser user) {
         HttpPost request = new HttpPost(url);
-        request.addHeader("Content-Type", "application/json");
+        request.addHeader(PlatformClient.JSON_HEADER);
         CloseableHttpClient client = HttpClients.createDefault();
         try {
             request.setEntity(new StringEntity(mapper.writeValueAsString(user)));
