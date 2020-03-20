@@ -59,6 +59,10 @@ public class AuthToken {
         return scope;
     }
 
+    public String getAuthorization() {
+        return "Bearer " + token;
+    }
+
     @Override
     public String toString() {
         return "AuthToken{" +
@@ -71,25 +75,15 @@ public class AuthToken {
 
 
     static AuthToken of(JsonMapper mapper, String url, AuthUser user) {
-        HttpPost request = new HttpPost(url);
-        request.addHeader(PlatformClient.JSON_HEADER);
-        CloseableHttpClient client = HttpClients.createDefault();
         try {
+            HttpPost request = new HttpPost(url);
+            request.addHeader(PlatformClient.JSON_HEADER);
             request.setEntity(new StringEntity(mapper.writeValueAsString(user)));
-            try (CloseableHttpClient httpClient = HttpClientSupplier.get();
-                 CloseableHttpResponse response = httpClient.execute(request)) {
-                StatusLine statusLine = response.getStatusLine();
-                if (statusLine.getStatusCode() != HttpStatus.SC_OK) {
-                    throw new PlatformClientException("There is an error on the AuthToken, http return: " +
-                            statusLine.getStatusCode() + " " + statusLine.getReasonPhrase());
-                }
-                String json = EntityUtils.toString(response.getEntity());
-                return mapper.reader()
-                        .forType(AuthToken.class)
-                        .readValue(json);
-            }
+            return HttpClientSupplier.request(request, mapper, AuthToken.class);
         } catch (IOException e) {
             throw new PlatformClientException("There is an error to get the client", e);
         }
     }
+
+
 }

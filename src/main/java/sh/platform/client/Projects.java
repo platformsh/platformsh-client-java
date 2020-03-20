@@ -52,21 +52,8 @@ public class Projects {
     static Projects of(JsonMapper mapper, String url, AuthToken token) {
         HttpGet request = new HttpGet(url);
         request.addHeader(PlatformClient.JSON_HEADER);
-        CloseableHttpClient client = HttpClients.createDefault();
 
-        try (CloseableHttpClient httpClient = HttpClientSupplier.get();
-             CloseableHttpResponse response = httpClient.execute(request)) {
-            StatusLine statusLine = response.getStatusLine();
-            if (statusLine.getStatusCode() != HttpStatus.SC_OK) {
-                throw new PlatformClientException("There is an error on the AuthToken, http return: " +
-                        statusLine.getStatusCode() + " " + statusLine.getReasonPhrase());
-            }
-            String json = EntityUtils.toString(response.getEntity());
-            return mapper.reader()
-                    .forType(Projects.class)
-                    .readValue(json);
-        } catch (IOException e) {
-            throw new PlatformClientException("There is an error to get the client", e);
-        }
+        request.addHeader("Authorization", token.getAuthorization());
+        return HttpClientSupplier.request(request, mapper, Projects.class);
     }
 }

@@ -1,5 +1,6 @@
 package sh.platform.client;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.time.LocalDateTime;
@@ -7,7 +8,11 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Map;
 
+
 public class Project {
+
+    @JsonProperty("id")
+    private String id;
 
     @JsonProperty("created_at")
     private LocalDateTime created;
@@ -36,6 +41,12 @@ public class Project {
     @JsonProperty("default_domain")
     private String domain;
 
+    @JsonProperty
+    private ProjectStatus status;
+
+    public String getId() {
+        return id;
+    }
 
     public LocalDateTime getCreated() {
         return created;
@@ -79,10 +90,15 @@ public class Project {
         return domain;
     }
 
+    public ProjectStatus getStatus() {
+        return status;
+    }
+
     @Override
     public String toString() {
         return "Project{" +
-                "created=" + created +
+                "id='" + id + '\'' +
+                ", created=" + created +
                 ", updated=" + updated +
                 ", title='" + title + '\'' +
                 ", description='" + description + '\'' +
@@ -91,6 +107,7 @@ public class Project {
                 ", repository=" + repository +
                 ", owner='" + owner + '\'' +
                 ", domain='" + domain + '\'' +
+                ", status=" + status +
                 '}';
     }
 }
