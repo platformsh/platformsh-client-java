@@ -1,0 +1,77 @@
+{
+  "http://master-7rqtwti-dvtam6qrvyjwi.eu-3.platformsh.site/speakers" : {
+    "id" : null,
+    "primary" : false,
+    "to" : "https://master-7rqtwti-dvtam6qrvyjwi.eu-3.platformsh.site/speakers",
+    "type" : "redirect",
+    "original_url" : "http://{default}/speakers"
+  },
+  "http://master-7rqtwti-dvtam6qrvyjwi.eu-3.platformsh.site/sessions" : {
+    "primary" : false,
+    "id" : null,
+    "original_url" : "http://{default}/sessions",
+    "to" : "https://master-7rqtwti-dvtam6qrvyjwi.eu-3.platformsh.site/sessions",
+    "type" : "redirect"
+  },
+  "https://master-7rqtwti-dvtam6qrvyjwi.eu-3.platformsh.site/" : {
+    "upstream" : "client",
+    "type" : "upstream",
+    "original_url" : "https://{default}/",
+    "attributes" : {},
+    "id" : null,
+    "primary" : false
+  },
+  "https://master-7rqtwti-dvtam6qrvyjwi.eu-3.platformsh.site/conferences" : {
+    "original_url" : "https://{default}/conferences",
+    "attributes" : {},
+    "type" : "upstream",
+    "upstream" : "conference",
+    "id" : "conference",
+    "primary" : true
+  },
+  "http://master-7rqtwti-dvtam6qrvyjwi.eu-3.platformsh.site/" : {
+    "original_url" : "http://{default}/",
+    "to" : "https://master-7rqtwti-dvtam6qrvyjwi.eu-3.platformsh.site/",
+    "type" : "redirect",
+    "id" : null,
+    "primary" : false
+  },
+  "http://master-7rqtwti-dvtam6qrvyjwi.eu-3.platformsh.site/conferences" : {
+    "primary" : false,
+    "id" : null,
+    "type" : "redirect",
+    "to" : "https://master-7rqtwti-dvtam6qrvyjwi.eu-3.platformsh.site/conferences",
+    "original_url" : "http://{default}/conferences"
+  },
+  "https://master-7rqtwti-dvtam6qrvyjwi.eu-3.platformsh.site/speakers" : {
+    "id" : "speaker",
+    "primary" : false,
+    "type" : "upstream",
+    "upstream" : "speaker",
+    "original_url" : "https://{default}/speakers",
+    "attributes" : {}
+  },
+  "https://www.master-7rqtwti-dvtam6qrvyjwi.eu-3.platformsh.site/" : {
+    "id" : null,
+    "primary" : false,
+    "original_url" : "https://www.{default}/",
+    "attributes" : {},
+    "type" : "redirect",
+    "to" : "https://master-7rqtwti-dvtam6qrvyjwi.eu-3.platformsh.site/"
+  },
+  "http://www.master-7rqtwti-dvtam6qrvyjwi.eu-3.platformsh.site/" : {
+    "primary" : false,
+    "id" : null,
+    "to" : "https://www.master-7rqtwti-dvtam6qrvyjwi.eu-3.platformsh.site/",
+    "type" : "redirect",
+    "original_url" : "http://www.{default}/"
+  },
+  "https://master-7rqtwti-dvtam6qrvyjwi.eu-3.platformsh.site/sessions" : {
+    "primary" : false,
+    "id" : "session",
+    "original_url" : "https://{default}/sessions",
+    "attributes" : {},
+    "upstream" : "session",
+    "type" : "upstream"
+  }
+}

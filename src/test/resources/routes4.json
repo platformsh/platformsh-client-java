@@ -1,0 +1,24 @@
+{
+  "http://master-7rqtwti-oj5m4ahp537bw.eu-3.platformsh.site/" : {
+    "id" : "client",
+    "original_url" : "http://{default}/",
+    "primary" : false,
+    "type" : "redirect",
+    "to" : "https://master-7rqtwti-oj5m4ahp537bw.eu-3.platformsh.site/"
+  },
+  "http://www.master-7rqtwti-oj5m4ahp537bw.eu-3.platformsh.site/" : {
+    "to" : "https://www.master-7rqtwti-oj5m4ahp537bw.eu-3.platformsh.site/",
+    "type" : "redirect",
+    "primary" : false,
+    "original_url" : "http://www.{default}/",
+    "id" : "client2"
+  },
+  "https://master-7rqtwti-oj5m4ahp537bw.eu-3.platformsh.site/" : {
+    "original_url" : "https://{default}/",
+    "id" : "upstream",
+    "attributes" : {},
+    "type" : "upstream",
+    "upstream" : "app",
+    "primary" : true
+  }
+}

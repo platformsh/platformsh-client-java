@@ -1,0 +1,21 @@
+{
+  "database": [
+    {
+      "username": "main",
+      "scheme": "pgsql",
+      "service": "postgresql",
+      "ip": "169.254.197.88",
+      "hostname": "tkydopuhmksuhglz7ox4x4de6m.postgresql.service._.eu-3.platformsh.site",
+      "cluster": "rjify4yjcwxaa-master-7rqtwti",
+      "host": "postgresql.internal",
+      "rel": "postgresql",
+      "path": "main",
+      "query": {
+        "is_master": true
+      },
+      "password": "main",
+      "type": "postgresql:11",
+      "port": 5432
+    }
+  ]
+}
