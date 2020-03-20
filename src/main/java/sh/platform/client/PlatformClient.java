@@ -1,13 +1,19 @@
 package sh.platform.client;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.json.JsonMapper;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.StringEntity;
-import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.config.Registry;
+import org.apache.http.config.RegistryBuilder;
+import org.apache.http.conn.socket.ConnectionSocketFactory;
+import org.apache.http.conn.socket.PlainConnectionSocketFactory;
+import org.apache.http.conn.ssl.NoopHostnameVerifier;
+import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
 import org.apache.http.impl.client.HttpClients;
+import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
 
-import java.io.UnsupportedEncodingException;
+import javax.net.ssl.SSLContext;
+import java.util.Map;
+
+import static java.util.Objects.requireNonNull;
 
 public class PlatformClient {
 
@@ -16,22 +22,20 @@ public class PlatformClient {
 
     private final String url;
 
-    private final String token;
+    private final AuthUser user;
 
+    private final AuthToken token;
 
     public PlatformClient(String url, String token) {
-        this.url = url;
-        this.token = token;
+        this.url = requireNonNull(url, "url is required");
+        this.user = new AuthUser(requireNonNull(token, "token is required"));
+        this.token = AuthToken.of(MAPPER, this.url + "oauth2/token", user);
     }
 
     public PlatformClient(String token) {
         this.url = DEFAULT_URL;
-        this.token = token;
-    }
-
-    public void init() {
-
-
+        this.user = new AuthUser(requireNonNull(token, "token is required"));
+        this.token = AuthToken.of(MAPPER, this.url + "oauth2/token", user);
     }
 
 

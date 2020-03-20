@@ -4,11 +4,15 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.json.JsonMapper;
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpStatus;
+import org.apache.http.StatusLine;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
+import org.apache.http.util.EntityUtils;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -29,9 +33,9 @@ public class AuthToken {
 
     @JsonCreator
     public AuthToken(@JsonProperty("access_token") String token,
-                     @JsonProperty("expires_in") long expires,
-                     @JsonProperty("token_type") String type,
-                     @JsonProperty("scope") String scope) {
+              @JsonProperty("expires_in") long expires,
+              @JsonProperty("token_type") String type,
+              @JsonProperty("scope") String scope) {
         this.token = token;
         this.type = type;
         this.scope = scope;
@@ -65,18 +69,24 @@ public class AuthToken {
     }
 
 
-    static AuthToken of(JsonMapper mapper, String url, String token, AuthUser user) {
+    static AuthToken of(JsonMapper mapper, String url, AuthUser user) {
         HttpPost request = new HttpPost(url);
         request.addHeader("Content-Type", "application/json");
         CloseableHttpClient client = HttpClients.createDefault();
-        AuthUser authUser = new AuthUser(token);
         try {
-            request.setEntity(new StringEntity(mapper.writeValueAsString(authUser)));
-            try (CloseableHttpClient httpClient = HttpClients.createDefault();
+            request.setEntity(new StringEntity(mapper.writeValueAsString(user)));
+            try (CloseableHttpClient httpClient = HttpClientSupplier.get();
                  CloseableHttpResponse response = httpClient.execute(request)) {
-
+                StatusLine statusLine = response.getStatusLine();
+                if (statusLine.getStatusCode() != HttpStatus.SC_OK) {
+                    throw new PlatformClientException("There is an error on the AuthToken, http return: " +
+                            statusLine.getReasonPhrase() + " code: " + statusLine.getStatusCode());
+                }
+                String json = EntityUtils.toString(response.getEntity());
+                return mapper.reader()
+                        .forType(AuthToken.class)
+                        .readValue(json);
             }
-            return null;
         } catch (IOException e) {
             throw new PlatformClientException("There is an error to get the client", e);
         }
