@@ -3,6 +3,7 @@ package sh.platform.client;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class PlatformClientTest {
 
@@ -10,9 +11,13 @@ public class PlatformClientTest {
 
     @Test
     public void shouldStartClient() {
-
         PlatformClient client = new PlatformClient(token);
         assertNotNull(client);
+    }
 
+    @Test
+    public void shouldReturnErrorWhenStart() {
+        assertThrows(PlatformClientException.class,
+                () -> new PlatformClient("error_error"));
     }
 }

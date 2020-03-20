@@ -80,7 +80,7 @@ public class AuthToken {
                 StatusLine statusLine = response.getStatusLine();
                 if (statusLine.getStatusCode() != HttpStatus.SC_OK) {
                     throw new PlatformClientException("There is an error on the AuthToken, http return: " +
-                            statusLine.getReasonPhrase() + " code: " + statusLine.getStatusCode());
+                            statusLine.getStatusCode() + " " + statusLine.getReasonPhrase());
                 }
                 String json = EntityUtils.toString(response.getEntity());
                 return mapper.reader()
