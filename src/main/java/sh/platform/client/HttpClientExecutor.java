@@ -21,13 +21,13 @@ import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.util.logging.Logger;
 
-final class HttpClientSupplier {
+final class HttpClientExecutor {
 
     private static final SSLConnectionSocketFactory FACTORY;
     private static final Registry<ConnectionSocketFactory> REGISTRY;
     private static final CloseableHttpClient CLIENT;
 
-    private static final Logger LOGGER = Logger.getLogger(HttpClientSupplier.class.getName());
+    private static final Logger LOGGER = Logger.getLogger(HttpClientExecutor.class.getName());
 
     static {
         try {
@@ -60,13 +60,11 @@ final class HttpClientSupplier {
                         + statusLine.getReasonPhrase());
             }
             String json = EntityUtils.toString(response.getEntity());
-            return mapper.reader()
-                    .forType(type)
-                    .readValue(json);
+            return mapper.readValue(json, type);
         } catch (IOException e) {
             throw new PlatformClientException("There is an error to get the client", e);
         } finally {
-            LOGGER.info("Time to execute the URL: " + request.toString() + " on " +
+            LOGGER.info("Time to execute " + request.toString() + " on " +
                     (System.currentTimeMillis() - start) + " ms");
 
         }
@@ -76,6 +74,6 @@ final class HttpClientSupplier {
         return CLIENT;
     }
 
-    private HttpClientSupplier() {
+    private HttpClientExecutor() {
     }
 }

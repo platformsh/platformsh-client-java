@@ -8,11 +8,21 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Map;
 
-
+/**
+ * On Platform.sh, a Project is backed by a single Git repository and encompasses your entire application stack,
+ * the services used by your application, the application's data storage, the production and staging environments,
+ * and the backups of those environments.
+ */
 public class Project {
 
     @JsonProperty("id")
     private String id;
+
+    @JsonProperty("endpoint")
+    private String endpoint;
+
+    @JsonProperty("subscription_id")
+    private String subscriptionId;
 
     @JsonProperty("created_at")
     private LocalDateTime created;
@@ -43,6 +53,9 @@ public class Project {
 
     @JsonProperty
     private ProjectStatus status;
+
+    @JsonProperty("owner_info")
+    private ProjectOwner ownerInfo;
 
     public String getId() {
         return id;
@@ -98,6 +111,8 @@ public class Project {
     public String toString() {
         return "Project{" +
                 "id='" + id + '\'' +
+                ", endpoint='" + endpoint + '\'' +
+                ", subscriptionId='" + subscriptionId + '\'' +
                 ", created=" + created +
                 ", updated=" + updated +
                 ", title='" + title + '\'' +
@@ -108,6 +123,7 @@ public class Project {
                 ", owner='" + owner + '\'' +
                 ", domain='" + domain + '\'' +
                 ", status=" + status +
+                ", ownerInfo=" + ownerInfo +
                 '}';
     }
 }

@@ -10,7 +10,7 @@ public class ProjectStatus {
     private final String message;
 
     @JsonCreator
-    public ProjectStatus(@JsonProperty("code") String code,
+    ProjectStatus(@JsonProperty("code") String code,
                          @JsonProperty("message") String message) {
         this.code = code;
         this.message = message;

@@ -31,6 +31,10 @@ public class PlatformClient {
         this.token = AuthToken.of(MAPPER, AUTH_URL, user);
     }
 
+    /**
+     * Retrieve list of projects associated with account
+     * @return the {@link Projects}
+     */
     public Projects getProjects() {
         return Projects.of(MAPPER, SERVICE_URL + "projects", token);
     }

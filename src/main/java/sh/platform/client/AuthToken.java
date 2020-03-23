@@ -2,21 +2,11 @@ package sh.platform.client;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.json.JsonMapper;
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpStatus;
-import org.apache.http.StatusLine;
-import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClients;
-import org.apache.http.message.BasicHeader;
-import org.apache.http.util.EntityUtils;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 
 public class AuthToken {
 
@@ -79,7 +69,7 @@ public class AuthToken {
             HttpPost request = new HttpPost(url);
             request.addHeader(PlatformClient.JSON_HEADER);
             request.setEntity(new StringEntity(mapper.writeValueAsString(user)));
-            return HttpClientSupplier.request(request, mapper, AuthToken.class);
+            return HttpClientExecutor.request(request, mapper, AuthToken.class);
         } catch (IOException e) {
             throw new PlatformClientException("There is an error to get the client", e);
         }
