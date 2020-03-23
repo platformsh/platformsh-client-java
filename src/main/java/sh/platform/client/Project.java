@@ -1,8 +1,10 @@
 package sh.platform.client;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.json.JsonMapper;
+import org.apache.http.client.methods.HttpGet;
 
-import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.util.Map;
 
 /**
@@ -22,10 +24,10 @@ public class Project {
     private String subscriptionId;
 
     @JsonProperty("created_at")
-    private LocalDateTime created;
+    private ZonedDateTime created;
 
     @JsonProperty("updated_at")
-    private LocalDateTime updated;
+    private ZonedDateTime updated;
 
     @JsonProperty
     private String title;
@@ -51,32 +53,32 @@ public class Project {
     private String timezone;
 
     @JsonProperty
-    private Map<String, String> subscription;
+    private Map<String, Object> subscription;
 
     @JsonProperty
-    private Map<String, String> repository;
+    private Map<String, Object> repository;
 
     @JsonProperty
-    private Map<String, String> attributes;
+    private Map<String, Object> attributes;
 
     @JsonProperty
-    private Map<String, String> settings;
+    private Map<String, Object> settings;
 
     @JsonProperty
-    private Map<String, String> capabilities;
+    private Map<String, Object> capabilities;
 
     @JsonProperty
-    private Map<String, String> integrations;
+    private Map<String, Object> integrations;
 
     public String getId() {
         return id;
     }
 
-    public LocalDateTime getCreated() {
+    public ZonedDateTime getCreated() {
         return created;
     }
 
-    public LocalDateTime getUpdated() {
+    public ZonedDateTime getUpdated() {
         return updated;
     }
 
@@ -120,27 +122,27 @@ public class Project {
         return timezone;
     }
 
-    public Map<String, String> getAttributes() {
+    public Map<String, Object> getAttributes() {
         return CollectionsUtils.readOnly(attributes);
     }
 
-    public Map<String, String> getSettings() {
+    public Map<String, Object> getSettings() {
         return CollectionsUtils.readOnly(settings);
     }
 
-    public Map<String, String> getCapabilities() {
+    public Map<String, Object> getCapabilities() {
         return CollectionsUtils.readOnly(capabilities);
     }
 
-    public Map<String, String> getIntegrations() {
+    public Map<String, Object> getIntegrations() {
         return CollectionsUtils.readOnly(integrations);
     }
 
-    public Map<String, String> getSubscription() {
+    public Map<String, Object> getSubscription() {
         return CollectionsUtils.readOnly(subscription);
     }
 
-    public Map<String, String> getRepository() {
+    public Map<String, Object> getRepository() {
         return CollectionsUtils.readOnly(repository);
     }
 
@@ -163,6 +165,13 @@ public class Project {
                 ", status=" + status +
                 ", ownerInfo=" + ownerInfo +
                 '}';
+    }
+
+    static Project of(JsonMapper mapper, String url, AuthToken token) {
+        HttpGet request = new HttpGet(url);
+        request.addHeader(PlatformClient.JSON_HEADER);
+        request.addHeader("Authorization", token.getAuthorization());
+        return HttpClientExecutor.request(request, mapper, Project.class);
     }
 }
 

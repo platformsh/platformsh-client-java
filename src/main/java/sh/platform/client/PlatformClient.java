@@ -4,7 +4,11 @@ import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.introspect.VisibilityChecker;
 import com.fasterxml.jackson.databind.json.JsonMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.apache.http.message.BasicHeader;
+
+import java.util.Objects;
+import java.util.Optional;
 
 import static java.util.Objects.requireNonNull;
 
@@ -17,6 +21,7 @@ public class PlatformClient {
 
     static {
         MAPPER = new JsonMapper();
+        MAPPER.registerModule(new JavaTimeModule());
         MAPPER.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
         MAPPER.setVisibilityChecker(VisibilityChecker.Std.defaultInstance()
                 .withFieldVisibility(JsonAutoDetect.Visibility.ANY));
@@ -33,10 +38,23 @@ public class PlatformClient {
 
     /**
      * Retrieve list of projects associated with account
+     *
      * @return the {@link Projects}
      */
     public Projects getProjects() {
         return Projects.of(MAPPER, SERVICE_URL + "projects", token);
+    }
+
+    /**
+     * Retrieve the details about an existing project
+     *
+     * @param id the project id
+     * @return the Project
+     * @throws NullPointerException when the id is null
+     */
+    public Optional<Project> getProject(String id) {
+        Objects.requireNonNull(id, "id is required");
+        return Optional.ofNullable(Project.of(MAPPER, SERVICE_URL + "projects/" + id, token));
     }
 
 

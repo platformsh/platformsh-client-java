@@ -5,7 +5,7 @@ import java.util.Map;
 
 final class CollectionsUtils {
 
-    static Map<String, String> readOnly(Map<String, String> map) {
+    static <K, V> Map<K, V> readOnly(Map<K, V> map) {
         if (map == null) {
             return Collections.emptyMap();
         }
