@@ -1,11 +1,8 @@
 package sh.platform.client;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.time.LocalDateTime;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.Map;
 
 /**
@@ -40,12 +37,6 @@ public class Project {
     private String region;
 
     @JsonProperty
-    private Map<String, String> subscription;
-
-    @JsonProperty
-    private Map<String, String> repository;
-
-    @JsonProperty
     private String owner;
 
     @JsonProperty("default_domain")
@@ -56,6 +47,26 @@ public class Project {
 
     @JsonProperty("owner_info")
     private ProjectOwner ownerInfo;
+
+    private String timezone;
+
+    @JsonProperty
+    private Map<String, String> subscription;
+
+    @JsonProperty
+    private Map<String, String> repository;
+
+    @JsonProperty
+    private Map<String, String> attributes;
+
+    @JsonProperty
+    private Map<String, String> settings;
+
+    @JsonProperty
+    private Map<String, String> capabilities;
+
+    @JsonProperty
+    private Map<String, String> integrations;
 
     public String getId() {
         return id;
@@ -81,20 +92,6 @@ public class Project {
         return region;
     }
 
-    public Map<String, String> getSubscription() {
-        if (subscription == null) {
-            return Collections.emptyMap();
-        }
-        return Collections.unmodifiableMap(subscription);
-    }
-
-    public Map<String, String> getRepository() {
-        if (repository == null) {
-            return Collections.emptyMap();
-        }
-        return Collections.unmodifiableMap(repository);
-    }
-
     public String getOwner() {
         return owner;
     }
@@ -106,6 +103,47 @@ public class Project {
     public ProjectStatus getStatus() {
         return status;
     }
+
+    public String getEndpoint() {
+        return endpoint;
+    }
+
+    public String getSubscriptionId() {
+        return subscriptionId;
+    }
+
+    public ProjectOwner getOwnerInfo() {
+        return ownerInfo;
+    }
+
+    public String getTimezone() {
+        return timezone;
+    }
+
+    public Map<String, String> getAttributes() {
+        return CollectionsUtils.readOnly(attributes);
+    }
+
+    public Map<String, String> getSettings() {
+        return CollectionsUtils.readOnly(settings);
+    }
+
+    public Map<String, String> getCapabilities() {
+        return CollectionsUtils.readOnly(capabilities);
+    }
+
+    public Map<String, String> getIntegrations() {
+        return CollectionsUtils.readOnly(integrations);
+    }
+
+    public Map<String, String> getSubscription() {
+        return CollectionsUtils.readOnly(subscription);
+    }
+
+    public Map<String, String> getRepository() {
+        return CollectionsUtils.readOnly(repository);
+    }
+
 
     @Override
     public String toString() {
