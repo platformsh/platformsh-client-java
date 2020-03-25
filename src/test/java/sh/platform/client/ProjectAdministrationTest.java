@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import sh.platform.client.project.Project;
 import sh.platform.client.project.ProjectAdministration;
+import sh.platform.client.project.ProjectCreate;
 import sh.platform.client.project.ProjectResponse;
 import sh.platform.client.project.Projects;
 
@@ -54,5 +55,13 @@ class ProjectAdministrationTest {
         Optional<Project> project = projectAdministration.getProject("not_found");
         assertNotNull(project);
         Assertions.assertTrue(project.isPresent());
+    }
+
+    @Test
+    public void shouldCreateProject() {
+        projectAdministration.create("title-sample")
+                .region("eu-3.platform.sh")
+                .description("That is a simple project")
+                .create()
     }
 }
