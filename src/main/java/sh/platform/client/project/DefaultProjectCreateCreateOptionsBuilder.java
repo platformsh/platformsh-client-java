@@ -12,7 +12,7 @@ import java.io.IOException;
 import java.util.Map;
 import java.util.Objects;
 
-class DefaultProjectBuilder implements ProjectBuilder, ProjectBuilder.ProjectBuilderBuild {
+class DefaultProjectCreateCreateOptionsBuilder implements ProjectCreateBuilder, ProjectCreateBuilder.ProjectCreateOptionsBuilder {
 
     private final String title;
 
@@ -30,7 +30,7 @@ class DefaultProjectBuilder implements ProjectBuilder, ProjectBuilder.ProjectBui
 
     private String domain;
 
-    DefaultProjectBuilder(String url, String title, AuthToken token, JsonMapper mapper) {
+    DefaultProjectCreateCreateOptionsBuilder(String url, String title, AuthToken token, JsonMapper mapper) {
         this.url = url;
         this.title = title;
         this.token = token;
@@ -39,28 +39,28 @@ class DefaultProjectBuilder implements ProjectBuilder, ProjectBuilder.ProjectBui
 
 
     @Override
-    public ProjectBuilderBuild region(String region) {
+    public ProjectCreateOptionsBuilder region(String region) {
         Objects.requireNonNull(region, "regions is required");
         this.region = region;
         return this;
     }
 
     @Override
-    public ProjectBuilderBuild description(String description) {
+    public ProjectCreateOptionsBuilder description(String description) {
         Objects.requireNonNull(description, "description is required");
         this.description = description;
         return this;
     }
 
     @Override
-    public ProjectBuilderBuild domain(String domain) {
+    public ProjectCreateOptionsBuilder domain(String domain) {
         Objects.requireNonNull(domain, "domain is required");
         this.domain = domain;
         return this;
     }
 
     @Override
-    public ProjectBuilderBuild attributes(String key, Object value) {
+    public ProjectCreateOptionsBuilder attributes(String key, Object value) {
         Objects.requireNonNull(key, "key is required");
         Objects.requireNonNull(value, "value is required");
         this.attributes.put(key, value);

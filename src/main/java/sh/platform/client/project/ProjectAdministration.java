@@ -71,8 +71,20 @@ public final class ProjectAdministration {
      * @return a builder to create a project
      * @throws NullPointerException when title is null
      */
-    public ProjectBuilder create(String title) {
+    public ProjectCreateBuilder create(String title) {
         Objects.requireNonNull(title, "title is required");
-        return new DefaultProjectBuilder(PROJECTS_URLS, title, token, MAPPER);
+        return new DefaultProjectCreateCreateOptionsBuilder(PROJECTS_URLS, title, token, MAPPER);
+    }
+
+    /**
+     * Delete a project from the platform
+     *
+     * @param id the id
+     * @return the result
+     * @throws NullPointerException when title is null
+     */
+    public ProjectResponse delete(String id) {
+        Objects.requireNonNull(id, "id is required");
+        return ProjectResponse.delete(MAPPER, PROJECTS_URLS + id, token);
     }
 }

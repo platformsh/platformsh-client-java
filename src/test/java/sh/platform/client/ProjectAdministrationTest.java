@@ -67,4 +67,11 @@ class ProjectAdministrationTest {
         assertEquals(200L, status.getCode());
         assertEquals("OK", status.getStatus());
     }
+
+    @Test
+    public void shouldDeleteProject() {
+        ProjectResponse status = projectAdministration.delete("5vhhfc7adtdgw");
+        assertEquals(200L, status.getCode());
+        assertEquals("OK", status.getStatus());
+    }
 }
