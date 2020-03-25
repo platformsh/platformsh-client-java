@@ -1,4 +1,4 @@
-package sh.platform.client;
+package sh.platform.client.util;
 
 import com.fasterxml.jackson.databind.json.JsonMapper;
 import org.apache.http.HttpStatus;
@@ -15,13 +15,14 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
 import org.apache.http.util.EntityUtils;
+import sh.platform.client.PlatformClientException;
 
 import javax.net.ssl.SSLContext;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.util.logging.Logger;
 
-final class HttpClientExecutor {
+public final class HttpClientExecutor {
 
     private static final SSLConnectionSocketFactory FACTORY;
     private static final Registry<ConnectionSocketFactory> REGISTRY;
@@ -50,7 +51,7 @@ final class HttpClientExecutor {
 
     }
 
-    static <T> T request(HttpUriRequest request, JsonMapper mapper, Class<T> type) {
+    public static <T> T request(HttpUriRequest request, JsonMapper mapper, Class<T> type) {
         long start = System.currentTimeMillis();
         try (CloseableHttpResponse response = getClient().execute(request)) {
             StatusLine statusLine = response.getStatusLine();

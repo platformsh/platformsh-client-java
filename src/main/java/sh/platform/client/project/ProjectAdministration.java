@@ -62,4 +62,16 @@ public final class ProjectAdministration {
         Objects.requireNonNull(id, "id is required");
         return ProjectResponse.cleanCache(MAPPER, SERVICE_URL + "projects/" + id + "/clear_build_cache", token);
     }
+
+    /**
+     * Create an empty project on the platform
+     *
+     * @param title the title
+     * @return a builder to create a project
+     * @throws NullPointerException when title is null
+     */
+    public ProjectBuilder create(String title) {
+        Objects.requireNonNull(title, "title is required");
+        return null;
+    }
 }

@@ -1,11 +1,11 @@
-package sh.platform.client;
+package sh.platform.client.util;
 
 import java.util.Collections;
 import java.util.Map;
 
-final class CollectionsUtils {
+public final class CollectionsUtils {
 
-    static <K, V> Map<K, V> readOnly(Map<K, V> map) {
+    public static <K, V> Map<K, V> readOnly(Map<K, V> map) {
         if (map == null) {
             return Collections.emptyMap();
         }

@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.json.JsonMapper;
 import org.apache.http.client.methods.HttpPost;
 import sh.platform.client.AuthToken;
-import sh.platform.client.HttpClientExecutor;
+import sh.platform.client.util.HttpClientExecutor;
 import sh.platform.client.PlatformClient;
 
 public class ProjectResponse {
