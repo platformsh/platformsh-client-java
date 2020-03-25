@@ -2,6 +2,7 @@ package sh.platform.client.project;
 
 import sh.platform.client.AuthToken;
 import sh.platform.client.AuthUser;
+import sh.platform.client.PlatformClient;
 
 import java.util.Objects;
 import java.util.Optional;
@@ -18,6 +19,10 @@ public final class ProjectAdministration {
 
     private final AuthToken token;
 
+    @Deprecated
+    /**
+     * Use {@link PlatformClient#getProjectAdministration()} instead.
+     */
     public ProjectAdministration(AuthUser user, AuthToken token) {
         this.user = user;
         this.token = token;
