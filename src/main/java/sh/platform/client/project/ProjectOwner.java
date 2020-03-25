@@ -1,4 +1,4 @@
-package sh.platform.client;
+package sh.platform.client.project;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;

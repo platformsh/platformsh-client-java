@@ -4,6 +4,10 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
+import sh.platform.client.project.Project;
+import sh.platform.client.project.ProjectAdministration;
+import sh.platform.client.project.ProjectResponse;
+import sh.platform.client.project.Projects;
 
 import java.util.Optional;
 

@@ -6,18 +6,16 @@ import com.fasterxml.jackson.databind.introspect.VisibilityChecker;
 import com.fasterxml.jackson.databind.json.JsonMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.apache.http.message.BasicHeader;
-
-import java.util.Objects;
-import java.util.Optional;
+import sh.platform.client.project.ProjectAdministration;
 
 import static java.util.Objects.requireNonNull;
 
 public class PlatformClient {
 
     private static final String AUTH_URL = "https://accounts.platform.sh/oauth2/token";
-    static final String SERVICE_URL = "https://api.platform.sh/";
-    static final JsonMapper MAPPER;
-    static final BasicHeader JSON_HEADER = new BasicHeader("Content-Type", "application/json");
+    public static final String SERVICE_URL = "https://api.platform.sh/";
+    public static final JsonMapper MAPPER;
+    public static final BasicHeader JSON_HEADER = new BasicHeader("Content-Type", "application/json");
 
     static {
         MAPPER = new JsonMapper();

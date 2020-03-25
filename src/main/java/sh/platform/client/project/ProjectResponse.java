@@ -1,10 +1,12 @@
-package sh.platform.client;
+package sh.platform.client.project;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.json.JsonMapper;
-import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
+import sh.platform.client.AuthToken;
+import sh.platform.client.HttpClientExecutor;
+import sh.platform.client.PlatformClient;
 
 public class ProjectResponse {
 

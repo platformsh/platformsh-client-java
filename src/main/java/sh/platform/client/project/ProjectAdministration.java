@@ -1,4 +1,7 @@
-package sh.platform.client;
+package sh.platform.client.project;
+
+import sh.platform.client.AuthToken;
+import sh.platform.client.AuthUser;
 
 import java.util.Objects;
 import java.util.Optional;
@@ -9,7 +12,7 @@ import static sh.platform.client.PlatformClient.SERVICE_URL;
 /**
  * It handles the API to project administration.
  */
-public class ProjectAdministration {
+public final class ProjectAdministration {
 
     private final AuthUser user;
 
