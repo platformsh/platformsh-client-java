@@ -12,7 +12,7 @@ public interface ProjectBuilder {
 
         ProjectBuilderBuild attributes(String key, Object value);
 
-        ProjectStatus create();
+        ProjectResponse create();
 
     }
 }

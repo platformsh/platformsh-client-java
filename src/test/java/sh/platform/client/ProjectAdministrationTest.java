@@ -6,8 +6,8 @@ import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import sh.platform.client.project.Project;
 import sh.platform.client.project.ProjectAdministration;
-import sh.platform.client.project.ProjectCreate;
 import sh.platform.client.project.ProjectResponse;
+import sh.platform.client.project.ProjectStatus;
 import sh.platform.client.project.Projects;
 
 import java.util.Optional;
@@ -59,9 +59,12 @@ class ProjectAdministrationTest {
 
     @Test
     public void shouldCreateProject() {
-        projectAdministration.create("title-sample")
+        ProjectResponse status = projectAdministration.create("title-sample")
                 .region("eu-3.platform.sh")
                 .description("That is a simple project")
-                .create()
+                .create();
+
+        assertEquals(200L, status.getCode());
+        assertEquals("OK", status.getStatus());
     }
 }

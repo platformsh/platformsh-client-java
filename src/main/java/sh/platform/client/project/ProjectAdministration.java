@@ -15,6 +15,7 @@ import static sh.platform.client.PlatformClient.SERVICE_URL;
  */
 public final class ProjectAdministration {
 
+    private static final String PROJECTS_URLS = SERVICE_URL + "projects/";
     private final AuthUser user;
 
     private final AuthToken token;
@@ -60,7 +61,7 @@ public final class ProjectAdministration {
      */
     public ProjectResponse clearProjectBuildCache(String id) {
         Objects.requireNonNull(id, "id is required");
-        return ProjectResponse.cleanCache(MAPPER, SERVICE_URL + "projects/" + id + "/clear_build_cache", token);
+        return ProjectResponse.cleanCache(MAPPER, PROJECTS_URLS + id + "/clear_build_cache", token);
     }
 
     /**
@@ -72,6 +73,6 @@ public final class ProjectAdministration {
      */
     public ProjectBuilder create(String title) {
         Objects.requireNonNull(title, "title is required");
-        return null;
+        return new DefaultProjectBuilder(PROJECTS_URLS, title, token, MAPPER);
     }
 }

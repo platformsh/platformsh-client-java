@@ -1,6 +1,5 @@
 package sh.platform.client.project;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.json.JsonMapper;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
@@ -10,7 +9,6 @@ import sh.platform.client.PlatformClientException;
 import sh.platform.client.util.HttpClientExecutor;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.util.Map;
 import java.util.Objects;
 
@@ -70,7 +68,7 @@ class DefaultProjectBuilder implements ProjectBuilder, ProjectBuilder.ProjectBui
     }
 
     @Override
-    public ProjectStatus create() {
+    public ProjectResponse create() {
         ProjectCreate entity = new ProjectCreate(title, region, attributes, description, domain);
         HttpPost request = new HttpPost(url);
         try {
@@ -80,6 +78,6 @@ class DefaultProjectBuilder implements ProjectBuilder, ProjectBuilder.ProjectBui
         }
         request.addHeader(PlatformClient.JSON_HEADER);
         request.addHeader("Authorization", token.getAuthorization());
-        return HttpClientExecutor.request(request, mapper, ProjectStatus.class);
+        return HttpClientExecutor.request(request, mapper, ProjectResponse.class);
     }
 }
