@@ -9,10 +9,11 @@ import sh.platform.client.PlatformClientException;
 import sh.platform.client.util.HttpClientExecutor;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
-class DefaultProjectCreateCreateOptionsBuilder implements ProjectCreateBuilder, ProjectCreateBuilder.ProjectCreateOptionsBuilder {
+class DefaultProjectCreateBuilder implements ProjectCreateBuilder, ProjectCreateBuilder.ProjectCreateOptionsBuilder {
 
     private final String title;
 
@@ -30,7 +31,7 @@ class DefaultProjectCreateCreateOptionsBuilder implements ProjectCreateBuilder, 
 
     private String domain;
 
-    DefaultProjectCreateCreateOptionsBuilder(String url, String title, AuthToken token, JsonMapper mapper) {
+    DefaultProjectCreateBuilder(String url, String title, AuthToken token, JsonMapper mapper) {
         this.url = url;
         this.title = title;
         this.token = token;
@@ -63,6 +64,9 @@ class DefaultProjectCreateCreateOptionsBuilder implements ProjectCreateBuilder, 
     public ProjectCreateOptionsBuilder attributes(String key, Object value) {
         Objects.requireNonNull(key, "key is required");
         Objects.requireNonNull(value, "value is required");
+        if (attributes == null) {
+            this.attributes = new HashMap<>();
+        }
         this.attributes.put(key, value);
         return this;
     }

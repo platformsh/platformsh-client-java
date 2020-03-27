@@ -73,7 +73,19 @@ public final class ProjectAdministration {
      */
     public ProjectCreateBuilder create(String title) {
         Objects.requireNonNull(title, "title is required");
-        return new DefaultProjectCreateCreateOptionsBuilder(PROJECTS_URLS, title, token, MAPPER);
+        return new DefaultProjectCreateBuilder(PROJECTS_URLS, title, token, MAPPER);
+    }
+
+    /**
+     * Update the details about an existing project
+     *
+     * @param id the id
+     * @return the result
+     * @throws NullPointerException when title is null
+     */
+    public ProjectBuilder update(String id) {
+        Objects.requireNonNull(id, "id is required");
+        return new ProjectBuilder(PROJECTS_URLS + id, token, MAPPER);
     }
 
     /**
@@ -87,4 +99,6 @@ public final class ProjectAdministration {
         Objects.requireNonNull(id, "id is required");
         return ProjectResponse.delete(MAPPER, PROJECTS_URLS + id, token);
     }
+
+
 }

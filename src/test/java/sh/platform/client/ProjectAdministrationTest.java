@@ -7,7 +7,6 @@ import org.junit.jupiter.api.Test;
 import sh.platform.client.project.Project;
 import sh.platform.client.project.ProjectAdministration;
 import sh.platform.client.project.ProjectResponse;
-import sh.platform.client.project.ProjectStatus;
 import sh.platform.client.project.Projects;
 
 import java.util.Optional;
@@ -19,6 +18,7 @@ import static sh.platform.client.PlatformClientTest.TOKEN;
 
 class ProjectAdministrationTest {
 
+    private static final String PROJECT = "njnyeca7aj53g";
     private PlatformClient client = new PlatformClient(TOKEN);
 
     private ProjectAdministration projectAdministration;
@@ -70,7 +70,16 @@ class ProjectAdministrationTest {
 
     @Test
     public void shouldDeleteProject() {
-        ProjectResponse status = projectAdministration.delete("5vhhfc7adtdgw");
+        ProjectResponse status = projectAdministration.delete(PROJECT);
+        assertEquals(200L, status.getCode());
+        assertEquals("OK", status.getStatus());
+    }
+
+    @Test
+    public void shouldUpdate() {
+        ProjectResponse status = projectAdministration.update(PROJECT)
+                .withTitle("a title")
+                .withDescription("update the description").update();
         assertEquals(200L, status.getCode());
         assertEquals("OK", status.getStatus());
     }
