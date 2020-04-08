@@ -8,7 +8,9 @@ import sh.platform.client.project.Project;
 import sh.platform.client.project.ProjectAdministration;
 import sh.platform.client.project.ProjectResponse;
 import sh.platform.client.project.Projects;
+import sh.platform.client.project.Variable;
 
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -82,5 +84,13 @@ class ProjectAdministrationTest {
                 .withDescription("update the description").update();
         assertEquals(200L, status.getCode());
         assertEquals("OK", status.getStatus());
+    }
+
+
+    @Test
+    public void shouldListVariable() {
+        final List<Variable> variables = projectAdministration.getVariables(PROJECT);
+        Assertions.assertNotNull(variables);
+
     }
 }
