@@ -1,16 +1,24 @@
 package sh.platform.client.project;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.json.JsonMapper;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
+import sh.platform.client.AuthToken;
+import sh.platform.client.PlatformClient;
 import sh.platform.client.util.CollectionsUtils;
+import sh.platform.client.util.HttpClientExecutor;
 
 import java.time.ZonedDateTime;
+import java.util.List;
 import java.util.Map;
 
 /**
  * These endpoints manipulate user-defined variables which are bound to an entire project. These variables
  * are accessible to all environments within a single project, and they can be made available at both build time
  * and runtime. For more information on project variables, see the Variables section of the documentation.
- *
+ * <p>
  * https://docs.platform.sh/development/variables.html#project-variables
  */
 public class Variable {
@@ -91,5 +99,13 @@ public class Variable {
                 ", created=" + created +
                 ", updated=" + updated +
                 '}';
+    }
+
+    static List<Variable> list(JsonMapper mapper, String url, AuthToken token) {
+        HttpGet request = new HttpGet(url);
+        request.addHeader(PlatformClient.JSON_HEADER);
+        request.addHeader("Authorization", token.getAuthorization());
+        return HttpClientExecutor.request(request, mapper, new TypeReference<List<Variable>>() {
+        });
     }
 }

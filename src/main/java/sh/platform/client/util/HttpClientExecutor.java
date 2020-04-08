@@ -1,5 +1,6 @@
 package sh.platform.client.util;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.json.JsonMapper;
 import org.apache.http.HttpStatus;
 import org.apache.http.StatusLine;
@@ -52,6 +53,26 @@ public final class HttpClientExecutor {
     }
 
     public static <T> T request(HttpUriRequest request, JsonMapper mapper, Class<T> type) {
+        long start = System.currentTimeMillis();
+        try (CloseableHttpResponse response = getClient().execute(request)) {
+            StatusLine statusLine = response.getStatusLine();
+            if (statusLine.getStatusCode() != HttpStatus.SC_OK) {
+                throw new PlatformClientException("There is an error on the request url " + request.toString()
+                        + " http return: " + statusLine.getStatusCode() + " "
+                        + statusLine.getReasonPhrase());
+            }
+            String json = EntityUtils.toString(response.getEntity());
+            return mapper.readValue(json, type);
+        } catch (IOException e) {
+            throw new PlatformClientException("There is an error to get the client", e);
+        } finally {
+            LOGGER.info("Time to execute " + request.toString() + " on " +
+                    (System.currentTimeMillis() - start) + " ms");
+
+        }
+    }
+
+    public static <T> T request(HttpUriRequest request, JsonMapper mapper, TypeReference<T> type) {
         long start = System.currentTimeMillis();
         try (CloseableHttpResponse response = getClient().execute(request)) {
             StatusLine statusLine = response.getStatusLine();
