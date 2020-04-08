@@ -21,6 +21,8 @@ import sh.platform.client.PlatformClientException;
 import javax.net.ssl.SSLContext;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
+import java.util.Arrays;
+import java.util.List;
 import java.util.logging.Logger;
 
 public final class HttpClientExecutor {
@@ -30,6 +32,9 @@ public final class HttpClientExecutor {
     private static final CloseableHttpClient CLIENT;
 
     private static final Logger LOGGER = Logger.getLogger(HttpClientExecutor.class.getName());
+
+    private static final List<Integer> RESPONSES = Arrays.asList(HttpStatus.SC_OK, HttpStatus.SC_ACCEPTED,
+            HttpStatus.SC_CREATED);
 
     static {
         try {
@@ -56,7 +61,8 @@ public final class HttpClientExecutor {
         long start = System.currentTimeMillis();
         try (CloseableHttpResponse response = getClient().execute(request)) {
             StatusLine statusLine = response.getStatusLine();
-            if (statusLine.getStatusCode() != HttpStatus.SC_OK) {
+
+            if (!RESPONSES.contains(statusLine.getStatusCode())) {
                 throw new PlatformClientException("There is an error on the request url " + request.toString()
                         + " http return: " + statusLine.getStatusCode() + " "
                         + statusLine.getReasonPhrase());
@@ -76,7 +82,7 @@ public final class HttpClientExecutor {
         long start = System.currentTimeMillis();
         try (CloseableHttpResponse response = getClient().execute(request)) {
             StatusLine statusLine = response.getStatusLine();
-            if (statusLine.getStatusCode() != HttpStatus.SC_OK) {
+            if (!RESPONSES.contains(statusLine.getStatusCode())) {
                 throw new PlatformClientException("There is an error on the request url " + request.toString()
                         + " http return: " + statusLine.getStatusCode() + " "
                         + statusLine.getReasonPhrase());

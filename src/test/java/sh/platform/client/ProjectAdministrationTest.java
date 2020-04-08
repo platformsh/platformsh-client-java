@@ -9,6 +9,7 @@ import sh.platform.client.project.ProjectAdministration;
 import sh.platform.client.project.ProjectResponse;
 import sh.platform.client.project.Projects;
 import sh.platform.client.project.Variable;
+import sh.platform.client.project.VariableBuilder;
 
 import java.util.List;
 import java.util.Optional;
@@ -91,6 +92,13 @@ class ProjectAdministrationTest {
     public void shouldListVariable() {
         final List<Variable> variables = projectAdministration.getVariables(PROJECT);
         Assertions.assertNotNull(variables);
+    }
 
+
+    @Test
+    public void shouldCreateVariable() {
+        final VariableBuilder builder = projectAdministration.createVariable(PROJECT);
+        final ProjectResponse status = builder.name("test-api-key").value("a value").create();
+        assertEquals(201L, status.getCode());
     }
 }

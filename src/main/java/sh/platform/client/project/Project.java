@@ -1,21 +1,25 @@
 package sh.platform.client.project;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.json.JsonMapper;
 import org.apache.http.client.methods.HttpGet;
 import sh.platform.client.AuthToken;
+import sh.platform.client.PlatformClient;
 import sh.platform.client.util.CollectionsUtils;
 import sh.platform.client.util.HttpClientExecutor;
-import sh.platform.client.PlatformClient;
 
 import java.time.ZonedDateTime;
 import java.util.Map;
+
+import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL;
 
 /**
  * On Platform.sh, a Project is backed by a single Git repository and encompasses your entire application stack,
  * the services used by your application, the application's data storage, the production and staging environments,
  * and the backups of those environments.
  */
+@JsonInclude(NON_NULL)
 public class Project {
 
     @JsonProperty("id")

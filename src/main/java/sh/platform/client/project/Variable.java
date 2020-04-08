@@ -1,5 +1,6 @@
 package sh.platform.client.project;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.json.JsonMapper;
@@ -14,6 +15,8 @@ import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Map;
 
+import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL;
+
 /**
  * These endpoints manipulate user-defined variables which are bound to an entire project. These variables
  * are accessible to all environments within a single project, and they can be made available at both build time
@@ -21,16 +24,17 @@ import java.util.Map;
  * <p>
  * https://docs.platform.sh/development/variables.html#project-variables
  */
+@JsonInclude(NON_NULL)
 public class Variable {
 
     @JsonProperty
     private String name;
 
     @JsonProperty
-    private Map<String, String> attributes;
+    private Map<String, Object> attributes;
 
     @JsonProperty
-    private String value;
+    private Object value;
 
     @JsonProperty("is_json")
     private boolean json;
@@ -50,15 +54,29 @@ public class Variable {
     @JsonProperty("updated_at")
     private ZonedDateTime updated;
 
+    Variable() {
+    }
+
+    Variable(String name, Map<String, Object> attributes, Object value, boolean json, boolean sensitive,
+             boolean build, boolean runtime) {
+        this.name = name;
+        this.attributes = attributes;
+        this.value = value;
+        this.json = json;
+        this.sensitive = sensitive;
+        this.build = build;
+        this.runtime = runtime;
+    }
+
     public String getName() {
         return name;
     }
 
-    public Map<String, String> getAttributes() {
+    public Map<String, Object> getAttributes() {
         return CollectionsUtils.readOnly(attributes);
     }
 
-    public String getValue() {
+    public Object getValue() {
         return value;
     }
 
