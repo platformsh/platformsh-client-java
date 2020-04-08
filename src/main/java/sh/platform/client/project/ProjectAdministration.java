@@ -4,6 +4,7 @@ import sh.platform.client.AuthToken;
 import sh.platform.client.AuthUser;
 import sh.platform.client.PlatformClient;
 
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -98,6 +99,17 @@ public final class ProjectAdministration {
     public ProjectResponse delete(String id) {
         Objects.requireNonNull(id, "id is required");
         return ProjectResponse.delete(MAPPER, PROJECTS_URLS + id, token);
+    }
+
+
+    /**
+     * Return a list of variable of this project
+     * @param projectId the project id
+     * @return the list of {@link Variable}
+     */
+    public List<Variable> getVariables(String projectId) {
+        Objects.requireNonNull(projectId, "id is required");
+        return Variable.list(MAPPER, PROJECTS_URLS + projectId + "/variables", token);
     }
 
 
