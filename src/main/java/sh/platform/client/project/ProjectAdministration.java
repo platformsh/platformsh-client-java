@@ -66,15 +66,15 @@ public final class ProjectAdministration {
     }
 
     /**
-     * Create an empty project on the platform
+     * Create an empty project on the platform or Update the details about an existing project
      *
      * @param title the title
      * @return a builder to create a project
      * @throws NullPointerException when title is null
      */
-    public ProjectCreateBuilder create(String title) {
+    public ProjectCreateBuilder project(String title) {
         Objects.requireNonNull(title, "title is required");
-        return new DefaultProjectCreateBuilder(PROJECTS_URLS, title, token, MAPPER);
+        return new ProjectCreateBuilder(PROJECTS_URLS, title, token, MAPPER);
     }
 
     /**
