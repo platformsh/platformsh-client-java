@@ -18,7 +18,7 @@ import static sh.platform.client.PlatformClientTest.TOKEN;
 
 class ProjectAdministrationTest {
 
-    private static final String PROJECT = "njnyeca7aj53g";
+    private static final String PROJECT = "5pjgfuplukffs";
     private PlatformClient client = new PlatformClient(TOKEN);
 
     private ProjectAdministration projectAdministration;
