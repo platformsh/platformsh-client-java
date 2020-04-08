@@ -22,6 +22,7 @@ import static sh.platform.client.PlatformClientTest.TOKEN;
 class ProjectAdministrationTest {
 
     private static final String PROJECT = "5pjgfuplukffs";
+    public static final String VARIABLE_KEY = "test-api-key";
     private PlatformClient client = new PlatformClient(TOKEN);
 
     private ProjectAdministration projectAdministration;
@@ -98,13 +99,20 @@ class ProjectAdministrationTest {
     @Test
     public void shouldCreateVariable() {
         final VariableBuilder builder = projectAdministration.addVariable(PROJECT);
-        final ProjectResponse status = builder.name("test-api-key").value("a value").create();
+        final ProjectResponse status = builder.name(VARIABLE_KEY).value("a value").create();
         assertEquals(201L, status.getCode());
     }
 
     @Test
     public void shouldDeleteVariable() {
-        final ProjectResponse status = projectAdministration.delete(PROJECT, "test-api-key");
+        final ProjectResponse status = projectAdministration.delete(PROJECT, VARIABLE_KEY);
         assertEquals(200L, status.getCode());
+    }
+
+
+    @Test
+    public void shouldGetVariable() {
+        final Variable variable = projectAdministration.getVariable(PROJECT, VARIABLE_KEY);
+        Assertions.assertNotNull(variable);
     }
 }

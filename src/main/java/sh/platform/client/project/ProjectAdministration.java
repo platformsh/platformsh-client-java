@@ -138,4 +138,18 @@ public final class ProjectAdministration {
         return ProjectResponse.delete(MAPPER, PROJECTS_URLS + projectId + "/variables/" + variableKey, token);
     }
 
+    /**
+     * Retrieve a single user-defined project variable.
+     *
+     * @param projectId   the project id
+     * @param variableKey the variable key
+     * @return the response {@link Variable}
+     */
+    public Variable getVariable(String projectId, String variableKey) {
+        Objects.requireNonNull(projectId, "projectId is required");
+        Objects.requireNonNull(variableKey, "variableKey is required");
+
+        return Variable.get(MAPPER, PROJECTS_URLS + projectId + "/variables/" + variableKey, token);
+    }
+
 }

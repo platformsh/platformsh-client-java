@@ -126,4 +126,11 @@ public class Variable {
         return HttpClientExecutor.request(request, mapper, new TypeReference<List<Variable>>() {
         });
     }
+
+    static Variable get(JsonMapper mapper, String url, AuthToken token) {
+        HttpGet request = new HttpGet(url);
+        request.addHeader(PlatformClient.JSON_HEADER);
+        request.addHeader("Authorization", token.getAuthorization());
+        return HttpClientExecutor.request(request, mapper, Variable.class);
+    }
 }
