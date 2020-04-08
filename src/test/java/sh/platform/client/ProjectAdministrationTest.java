@@ -1,5 +1,6 @@
 package sh.platform.client;
 
+import org.apache.http.HttpStatus;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
@@ -49,7 +50,7 @@ class ProjectAdministrationTest {
     public void shouldCleanBuildCache() {
         ProjectResponse project = projectAdministration.clearProjectBuildCache(PROJECT_ID);
         assertNotNull(project);
-        assertEquals(200L, project.getCode());
+        assertEquals(HttpStatus.SC_OK, project.getCode());
         assertEquals("OK", project.getStatus());
     }
 
@@ -68,14 +69,14 @@ class ProjectAdministrationTest {
                 .description("That is a simple project")
                 .create();
 
-        assertEquals(200L, status.getCode());
+        assertEquals(HttpStatus.SC_OK, status.getCode());
         assertEquals("OK", status.getStatus());
     }
 
     @Test
     public void shouldDeleteProject() {
         ProjectResponse status = projectAdministration.delete(PROJECT);
-        assertEquals(200L, status.getCode());
+        assertEquals(HttpStatus.SC_OK, status.getCode());
         assertEquals("OK", status.getStatus());
     }
 
@@ -84,7 +85,7 @@ class ProjectAdministrationTest {
         ProjectResponse status = projectAdministration.update(PROJECT)
                 .withTitle("a title")
                 .withDescription("update the description").update();
-        assertEquals(200L, status.getCode());
+        assertEquals(HttpStatus.SC_OK, status.getCode());
         assertEquals("OK", status.getStatus());
     }
 
@@ -98,21 +99,28 @@ class ProjectAdministrationTest {
 
     @Test
     public void shouldCreateVariable() {
-        final VariableBuilder builder = projectAdministration.addVariable(PROJECT);
+        final VariableBuilder builder = projectAdministration.variable(PROJECT);
         final ProjectResponse status = builder.name(VARIABLE_KEY).value("a value").create();
-        assertEquals(201L, status.getCode());
+        assertEquals(HttpStatus.SC_CREATED, status.getCode());
     }
 
     @Test
     public void shouldDeleteVariable() {
         final ProjectResponse status = projectAdministration.delete(PROJECT, VARIABLE_KEY);
-        assertEquals(200L, status.getCode());
+        assertEquals(HttpStatus.SC_OK, status.getCode());
     }
-
 
     @Test
     public void shouldGetVariable() {
         final Variable variable = projectAdministration.getVariable(PROJECT, VARIABLE_KEY);
         Assertions.assertNotNull(variable);
     }
+
+    @Test
+    public void shouldUpdateVariable() {
+        final VariableBuilder builder = projectAdministration.variable(PROJECT);
+        final ProjectResponse status = builder.name(VARIABLE_KEY).value("an updated value").update();
+        assertEquals(HttpStatus.SC_OK, status.getCode());
+    }
+
 }

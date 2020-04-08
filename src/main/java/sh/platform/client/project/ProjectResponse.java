@@ -12,19 +12,19 @@ import sh.platform.client.PlatformClient;
 
 public class ProjectResponse {
 
-    private final Long code;
+    private final Integer code;
 
     private final String status;
 
     @JsonCreator
-    ProjectResponse(@JsonProperty("code") Long code,
+    ProjectResponse(@JsonProperty("code") Integer code,
                     @JsonProperty("status") String status) {
 
         this.code = code;
         this.status = status;
     }
 
-    public Long getCode() {
+    public Integer getCode() {
         return code;
     }
 

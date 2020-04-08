@@ -110,19 +110,19 @@ public final class ProjectAdministration {
      */
     public List<Variable> getVariables(String projectId) {
         Objects.requireNonNull(projectId, "projectId is required");
-        return Variable.list(MAPPER, PROJECTS_URLS + projectId + "/variables", token);
+        return Variable.list(MAPPER, PROJECTS_URLS + projectId + "/variables/", token);
     }
 
     /**
-     * Add a variable to a project. The value can be either a string or a JSON object (default: string),
+     * Add a variable or update to a project. The value can be either a string or a JSON object (default: string),
      * as specified by the is_json boolean flag. See the Variables section in our documentation for more information.
      *
      * @param projectId the project id
      * @return the {@link VariableBuilder}
      */
-    public VariableBuilder addVariable(String projectId) {
+    public VariableBuilder variable(String projectId) {
         Objects.requireNonNull(projectId, "projectId is required");
-        return new VariableBuilder(MAPPER, PROJECTS_URLS + projectId + "/variables", token);
+        return new VariableBuilder(MAPPER, PROJECTS_URLS + projectId + "/variables/", token);
     }
 
     /**

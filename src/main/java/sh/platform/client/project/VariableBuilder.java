@@ -1,7 +1,9 @@
 package sh.platform.client.project;
 
 import com.fasterxml.jackson.databind.json.JsonMapper;
+import org.apache.http.client.methods.HttpEntityEnclosingRequestBase;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPatch;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import sh.platform.client.AuthToken;
@@ -135,7 +137,17 @@ public class VariableBuilder {
             HttpPost request = new HttpPost(url);
             request.addHeader(PlatformClient.JSON_HEADER);
             request.addHeader("Authorization", token.getAuthorization());
+            return execute(request);
+        }
 
+        public ProjectResponse update() {
+            HttpPatch request = new HttpPatch(url + name);
+            request.addHeader(PlatformClient.JSON_HEADER);
+            request.addHeader("Authorization", token.getAuthorization());
+            return execute(request);
+        }
+
+        private ProjectResponse execute(HttpEntityEnclosingRequestBase request) {
             Variable entity = new Variable(name, attributes, value, json, sensitive, build, runtime);
             try {
                 request.setEntity(new StringEntity(mapper.writeValueAsString(entity)));
@@ -144,6 +156,7 @@ public class VariableBuilder {
             }
             return HttpClientExecutor.request(request, mapper, ProjectResponse.class);
         }
+
     }
 
 }
