@@ -97,8 +97,14 @@ class ProjectAdministrationTest {
 
     @Test
     public void shouldCreateVariable() {
-        final VariableBuilder builder = projectAdministration.createVariable(PROJECT);
+        final VariableBuilder builder = projectAdministration.addVariable(PROJECT);
         final ProjectResponse status = builder.name("test-api-key").value("a value").create();
         assertEquals(201L, status.getCode());
+    }
+
+    @Test
+    public void shouldDeleteVariable() {
+        final ProjectResponse status = projectAdministration.delete(PROJECT, "test-api-key");
+        assertEquals(200L, status.getCode());
     }
 }

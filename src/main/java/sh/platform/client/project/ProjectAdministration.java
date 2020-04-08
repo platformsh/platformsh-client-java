@@ -104,24 +104,38 @@ public final class ProjectAdministration {
 
     /**
      * Retrieve a list of objects representing the user-defined variables within a project.
+     *
      * @param projectId the project id
      * @return the list of {@link Variable}
      */
     public List<Variable> getVariables(String projectId) {
-        Objects.requireNonNull(projectId, "id is required");
+        Objects.requireNonNull(projectId, "projectId is required");
         return Variable.list(MAPPER, PROJECTS_URLS + projectId + "/variables", token);
     }
 
     /**
      * Add a variable to a project. The value can be either a string or a JSON object (default: string),
      * as specified by the is_json boolean flag. See the Variables section in our documentation for more information.
+     *
      * @param projectId the project id
      * @return the {@link VariableBuilder}
      */
-    public VariableBuilder createVariable(String projectId) {
-        Objects.requireNonNull(projectId, "id is required");
+    public VariableBuilder addVariable(String projectId) {
+        Objects.requireNonNull(projectId, "projectId is required");
         return new VariableBuilder(MAPPER, PROJECTS_URLS + projectId + "/variables", token);
     }
 
+    /**
+     * Delete a single user-defined project variable.
+     *
+     * @param projectId   the project id
+     * @param variableKey the variable key
+     * @return the response status
+     */
+    public ProjectResponse delete(String projectId, String variableKey) {
+        Objects.requireNonNull(projectId, "projectId is required");
+        Objects.requireNonNull(variableKey, "variableKey is required");
+        return ProjectResponse.delete(MAPPER, PROJECTS_URLS + projectId + "/variables/" + variableKey, token);
+    }
 
 }
