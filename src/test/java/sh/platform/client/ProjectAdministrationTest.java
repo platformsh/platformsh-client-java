@@ -64,7 +64,7 @@ class ProjectAdministrationTest {
 
     @Test
     public void shouldCreateProject() {
-        ProjectResponse status = projectAdministration.project("title-sample")
+        ProjectResponse status = projectAdministration.create("title-sample")
                 .region("eu-3.platform.sh")
                 .description("That is a simple project")
                 .create();
