@@ -36,7 +36,7 @@ public final class ProjectAdministration {
      * @return the {@link Projects}
      */
     public Projects getProjects() {
-        return Projects.of(MAPPER, SERVICE_URL + "projects", token);
+        return Projects.of(MAPPER, PROJECTS_URLS, token);
     }
 
     /**
@@ -48,7 +48,7 @@ public final class ProjectAdministration {
      */
     public Optional<Project> getProject(String id) {
         Objects.requireNonNull(id, "id is required");
-        return Optional.ofNullable(Project.of(MAPPER, SERVICE_URL + "projects/" + id, token));
+        return Optional.ofNullable(Project.of(MAPPER, PROJECTS_URLS + id, token));
     }
 
     /**
