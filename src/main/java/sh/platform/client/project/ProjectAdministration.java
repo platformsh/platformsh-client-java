@@ -2,7 +2,6 @@ package sh.platform.client.project;
 
 import sh.platform.client.AuthToken;
 import sh.platform.client.AuthUser;
-import sh.platform.client.Commit;
 import sh.platform.client.PlatformClient;
 
 import java.util.List;
@@ -183,5 +182,16 @@ public final class ProjectAdministration {
         Objects.requireNonNull(projectId, "projectId is required");
         Objects.requireNonNull(commit, "commit is required");
         return Commit.get(MAPPER, PROJECTS_URLS + projectId + "/git/commits/" + commit, token);
+    }
+
+    /**
+     * Retrieve, by hash, an object representing a blob in the repository backing a project. This endpoint allows direct
+     * read-only access to the contents of files in a repo. It returns the file in the content
+     * field of the response object, encoded according to the format in the encoding field, e.g. base64.
+     * @param project the project id
+     * @param blob the blob id
+     * @return the {@link Blob}
+     */
+    public Blob getRepositoryBlob(String project, String blob) {
     }
 }

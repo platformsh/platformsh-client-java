@@ -4,7 +4,8 @@ import java.util.function.Supplier;
 
 public enum  TestProperties implements Supplier<String> {
 
-    PROJECT("platform.api.project"), TOKEN("platform.api.token");
+    PROJECT("platform.api.project"), TOKEN("platform.api.token"),
+    COMMIT("platform.api.commit"), BLOB("platform.api.blob");
 
     private final String value;
 

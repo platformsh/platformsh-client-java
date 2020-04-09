@@ -1,14 +1,13 @@
-package sh.platform.client;
+package sh.platform.client.project;
 
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.json.JsonMapper;
 import org.apache.http.client.methods.HttpGet;
-import sh.platform.client.util.CollectionsUtils;
+import sh.platform.client.AuthToken;
+import sh.platform.client.PlatformClient;
 import sh.platform.client.util.HttpClientExecutor;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 
 public class Commit {
 

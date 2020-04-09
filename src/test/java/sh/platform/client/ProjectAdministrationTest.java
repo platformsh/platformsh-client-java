@@ -5,6 +5,8 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
+import sh.platform.client.project.Blob;
+import sh.platform.client.project.Commit;
 import sh.platform.client.project.Project;
 import sh.platform.client.project.ProjectAdministration;
 import sh.platform.client.project.ProjectResponse;
@@ -24,6 +26,8 @@ class ProjectAdministrationTest {
     private static final String PROJECT;
     private static final String TOKEN;
     private static final String VARIABLE_KEY = "test-api-key";
+    private static final String COMMIT;
+    private static final String BLOB;
 
     private ProjectAdministration projectAdministration;
 
@@ -31,6 +35,7 @@ class ProjectAdministrationTest {
         ConfigurationUtil util = ConfigurationUtil.INSTANCE;
         PROJECT = util.get(TestProperties.PROJECT);
         TOKEN = util.get(TestProperties.TOKEN);
+        BLOB = util.get(TestProperties.COMMIT);
     }
 
     private PlatformClient client = new PlatformClient(TOKEN);
@@ -138,8 +143,13 @@ class ProjectAdministrationTest {
 
     @Test
     public void shouldReturnCommit() {
-        Commit commit = projectAdministration.getRepositoryCommit(PROJECT, "8f20c307956e9a05b36a78194e449bf6c802b1a6");
+        Commit commit = projectAdministration.getRepositoryCommit(PROJECT, COMMIT);
         Assertions.assertNotNull(commit);
     }
 
+    @Test
+    public void shouldReturnBlog() {
+        Blob blob = projectAdministration.getRepositoryBlob(PROJECT, COMMIT);
+        Assertions.assertNotNull(blob);
+    }
 }

@@ -1,4 +1,4 @@
-package sh.platform.client;
+package sh.platform.client.project;
 
 import java.time.ZonedDateTime;
 
