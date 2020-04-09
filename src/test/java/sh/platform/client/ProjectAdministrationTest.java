@@ -13,6 +13,7 @@ import sh.platform.client.project.Variable;
 import sh.platform.client.project.VariableBuilder;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -127,6 +128,18 @@ class ProjectAdministrationTest {
         final VariableBuilder builder = projectAdministration.variable(PROJECT);
         final ProjectResponse status = builder.name(VARIABLE_KEY).value("an updated value").update();
         assertEquals(HttpStatus.SC_OK, status.getCode());
+    }
+
+    @Test
+    public void shouldReturnRefList() {
+        List<Map<String, Object>> refs = projectAdministration.getRepositoryRefs(PROJECT);
+        Assertions.assertNotNull(refs);
+    }
+
+    @Test
+    public void shouldReturnCommit() {
+        Commit commit = projectAdministration.getRepositoryCommit(PROJECT, "8f20c307956e9a05b36a78194e449bf6c802b1a6");
+        Assertions.assertNotNull(commit);
     }
 
 }

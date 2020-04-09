@@ -2,9 +2,11 @@ package sh.platform.client.project;
 
 import sh.platform.client.AuthToken;
 import sh.platform.client.AuthUser;
+import sh.platform.client.Commit;
 import sh.platform.client.PlatformClient;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -152,4 +154,34 @@ public final class ProjectAdministration {
         return Variable.get(MAPPER, PROJECTS_URLS + projectId + "/variables/" + variableKey, token);
     }
 
+    /**
+     * Retrieve a list of refs/* in the repository backing a project. This endpoint functions
+     * similarly to git show-ref, with each returned object containing a ref field with the ref's name,
+     * and an object containing the associated commit ID.
+     *
+     * @param projectId the project id
+     * @return the list of refs/*
+     */
+    public List<Map<String, Object>> getRepositoryRefs(String projectId) {
+        Objects.requireNonNull(projectId, "projectId is required");
+        return Repository.refs(MAPPER, PROJECTS_URLS + projectId + "/git/refs", token);
+    }
+
+    /**
+     * Retrieve, by hash, an object representing a commit in the repository backing a project.
+     * This endpoint functions similarly to git cat-file -p <commit-id>. The returned object contains the
+     * hash of the Git tree that it belongs to, as well as the ID of parent commits.
+     * <p>
+     * The commit represented by a parent ID can be retrieved using this endpoint,
+     * while the tree state represented by this commit can be retrieved using the Get a tree object endpoint.
+     *
+     * @param projectId the project id
+     * @param commit    the commit hash
+     * @return the {@link Commit}
+     */
+    public Commit getRepositoryCommit(String projectId, String commit) {
+        Objects.requireNonNull(projectId, "projectId is required");
+        Objects.requireNonNull(commit, "commit is required");
+        return Commit.get(MAPPER, PROJECTS_URLS + projectId + "/git/commits/" + commit, token);
+    }
 }
