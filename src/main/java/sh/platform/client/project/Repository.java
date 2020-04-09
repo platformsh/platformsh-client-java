@@ -21,4 +21,11 @@ final class Repository {
         request.addHeader("Authorization", token.getAuthorization());
         return HttpClientExecutor.request(request, mapper, new TypeReference<List<Map<String, Object>>>() {});
     }
+
+    public static Map<String, Object> ref(JsonMapper mapper, String url, AuthToken token) {
+        HttpGet request = new HttpGet(url);
+        request.addHeader(PlatformClient.JSON_HEADER);
+        request.addHeader("Authorization", token.getAuthorization());
+        return HttpClientExecutor.request(request, mapper, new TypeReference<Map<String, Object>>() {});
+    }
 }

@@ -2,10 +2,11 @@ package sh.platform.client;
 
 import java.util.function.Supplier;
 
-public enum  TestProperties implements Supplier<String> {
+public enum TestProperties implements Supplier<String> {
 
     PROJECT("platform.api.project"), TOKEN("platform.api.token"),
-    COMMIT("platform.api.commit"), BLOB("platform.api.blob");
+    COMMIT("platform.api.commit"), BLOB("platform.api.blob"),
+    TREE("platform.api.tree");
 
     private final String value;
 

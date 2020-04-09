@@ -167,6 +167,36 @@ public final class ProjectAdministration {
     }
 
     /**
+     * Retrieve the details of a single refs object in the repository backing a project.
+     * This endpoint functions similarly to git show-ref <pattern>, although the pattern
+     * must be a full ref id, rather than a matching pattern.
+     * NOTE: The {repositoryRefId} must be properly escaped.
+     * That is, the ref refs/heads/master is accessible via /projects/{projectId}/git/refs/heads%2Fmaster.
+     * @param project the project id
+     * @param ref the ref properly escaped.
+     * @return the ref
+     */
+    public Map<String, Object> getRepositoryRef(String project, String ref) {
+        Objects.requireNonNull(project, "project is required");
+        Objects.requireNonNull(ref, "ref is required");
+        return Repository.ref(MAPPER, PROJECTS_URLS + project + "/git/refs/"+ ref, token);
+    }
+
+    /**
+     * Retrieve, by hash, the tree state represented by a commit.
+     * The returned object's tree field contains a list of files and directories present in the tree.
+     *
+     * Directories in the tree can be recursively retrieved by this endpoint
+     * through their hashes. Files in the tree can be retrieved by the Get a blob object endpoint.
+     * @param project the project id
+     * @param tree the tree id
+     * @return the tree result
+     */
+    public Map<String, Object> getRepositoryTree(String project, String tree) {
+        return Repository.ref(MAPPER, PROJECTS_URLS + project + "/git/trees/"+ tree, token);
+    }
+
+    /**
      * Retrieve, by hash, an object representing a commit in the repository backing a project.
      * This endpoint functions similarly to git cat-file -p <commit-id>. The returned object contains the
      * hash of the Git tree that it belongs to, as well as the ID of parent commits.
@@ -197,4 +227,5 @@ public final class ProjectAdministration {
         Objects.requireNonNull(blob, "blob is required");
         return Blob.get(MAPPER, PROJECTS_URLS + project + "/git/blobs/" + blob, token);
     }
+
 }

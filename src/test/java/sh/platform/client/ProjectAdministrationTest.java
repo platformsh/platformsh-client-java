@@ -28,6 +28,7 @@ class ProjectAdministrationTest {
     private static final String VARIABLE_KEY = "test-api-key";
     private static final String COMMIT;
     private static final String BLOB;
+    private static final String TREE;
 
     private ProjectAdministration projectAdministration;
 
@@ -35,7 +36,9 @@ class ProjectAdministrationTest {
         ConfigurationUtil util = ConfigurationUtil.INSTANCE;
         PROJECT = util.get(TestProperties.PROJECT);
         TOKEN = util.get(TestProperties.TOKEN);
-        BLOB = util.get(TestProperties.COMMIT);
+        COMMIT = util.get(TestProperties.COMMIT);
+        BLOB = util.get(TestProperties.BLOB);
+        TREE = util.get(TestProperties.TREE);
     }
 
     private PlatformClient client = new PlatformClient(TOKEN);
@@ -140,6 +143,19 @@ class ProjectAdministrationTest {
         List<Map<String, Object>> refs = projectAdministration.getRepositoryRefs(PROJECT);
         Assertions.assertNotNull(refs);
     }
+
+    @Test
+    public void shouldReturnRef() {
+        Map<String, Object> ref = projectAdministration.getRepositoryRef(PROJECT, "heads%2Fmaster");
+        Assertions.assertNotNull(ref);
+    }
+
+    @Test
+    public void shouldReturnTree() {
+        Map<String, Object> tree = projectAdministration.getRepositoryTree(PROJECT, "heads%2Fmaster");
+        Assertions.assertNotNull(tree);
+    }
+
 
     @Test
     public void shouldReturnCommit() {
