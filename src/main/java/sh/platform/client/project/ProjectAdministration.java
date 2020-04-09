@@ -43,13 +43,13 @@ public final class ProjectAdministration {
     /**
      * Retrieve the details about an existing project
      *
-     * @param id the project id
+     * @param project the project id
      * @return the Project
-     * @throws NullPointerException when the id is null
+     * @throws NullPointerException when the project is null
      */
-    public Optional<Project> getProject(String id) {
-        Objects.requireNonNull(id, "id is required");
-        return Optional.ofNullable(Project.of(MAPPER, PROJECTS_URLS + id, token));
+    public Optional<Project> getProject(String project) {
+        Objects.requireNonNull(project, "project is required");
+        return Optional.ofNullable(Project.of(MAPPER, PROJECTS_URLS + project, token));
     }
 
     /**
@@ -57,13 +57,13 @@ public final class ProjectAdministration {
      * More information on clearing the build cache can be found in our user documentation:
      * https://docs.platform.sh/development/troubleshoot.html#clear-the-build-cache
      *
-     * @param id the project id
+     * @param project the project id
      * @return the result of clean cache
-     * @throws NullPointerException when the id is null
+     * @throws NullPointerException when the project is null
      */
-    public ProjectResponse clearProjectBuildCache(String id) {
-        Objects.requireNonNull(id, "id is required");
-        return ProjectResponse.cleanCache(MAPPER, PROJECTS_URLS + id + "/clear_build_cache", token);
+    public ProjectResponse clearProjectBuildCache(String project) {
+        Objects.requireNonNull(project, "project is required");
+        return ProjectResponse.cleanCache(MAPPER, PROJECTS_URLS + project + "/clear_build_cache", token);
     }
 
     /**
@@ -81,76 +81,76 @@ public final class ProjectAdministration {
     /**
      * Update the details about an existing project
      *
-     * @param id the id
+     * @param project the id
      * @return the result
      * @throws NullPointerException when title is null
      */
-    public ProjectBuilder update(String id) {
-        Objects.requireNonNull(id, "id is required");
-        return new ProjectBuilder(PROJECTS_URLS + id, token, MAPPER);
+    public ProjectBuilder update(String project) {
+        Objects.requireNonNull(project, "project is required");
+        return new ProjectBuilder(PROJECTS_URLS + project, token, MAPPER);
     }
 
     /**
      * Delete a project from the platform
      *
-     * @param id the id
+     * @param project the id
      * @return the result
      * @throws NullPointerException when title is null
      */
-    public ProjectResponse delete(String id) {
-        Objects.requireNonNull(id, "id is required");
-        return ProjectResponse.delete(MAPPER, PROJECTS_URLS + id, token);
+    public ProjectResponse delete(String project) {
+        Objects.requireNonNull(project, "project is required");
+        return ProjectResponse.delete(MAPPER, PROJECTS_URLS + project, token);
     }
 
 
     /**
      * Retrieve a list of objects representing the user-defined variables within a project.
      *
-     * @param projectId the project id
+     * @param project the project id
      * @return the list of {@link Variable}
      */
-    public List<Variable> getVariables(String projectId) {
-        Objects.requireNonNull(projectId, "projectId is required");
-        return Variable.list(MAPPER, PROJECTS_URLS + projectId + "/variables/", token);
+    public List<Variable> getVariables(String project) {
+        Objects.requireNonNull(project, "project is required");
+        return Variable.list(MAPPER, PROJECTS_URLS + project + "/variables/", token);
     }
 
     /**
      * Add a variable or update to a project. The value can be either a string or a JSON object (default: string),
      * as specified by the is_json boolean flag. See the Variables section in our documentation for more information.
      *
-     * @param projectId the project id
+     * @param project the project id
      * @return the {@link VariableBuilder}
      */
-    public VariableBuilder variable(String projectId) {
-        Objects.requireNonNull(projectId, "projectId is required");
-        return new VariableBuilder(MAPPER, PROJECTS_URLS + projectId + "/variables/", token);
+    public VariableBuilder variable(String project) {
+        Objects.requireNonNull(project, "project is required");
+        return new VariableBuilder(MAPPER, PROJECTS_URLS + project + "/variables/", token);
     }
 
     /**
      * Delete a single user-defined project variable.
      *
-     * @param projectId   the project id
+     * @param project   the project id
      * @param variableKey the variable key
      * @return the response status
      */
-    public ProjectResponse delete(String projectId, String variableKey) {
-        Objects.requireNonNull(projectId, "projectId is required");
+    public ProjectResponse delete(String project, String variableKey) {
+        Objects.requireNonNull(project, "project is required");
         Objects.requireNonNull(variableKey, "variableKey is required");
-        return ProjectResponse.delete(MAPPER, PROJECTS_URLS + projectId + "/variables/" + variableKey, token);
+        return ProjectResponse.delete(MAPPER, PROJECTS_URLS + project + "/variables/" + variableKey, token);
     }
 
     /**
      * Retrieve a single user-defined project variable.
      *
-     * @param projectId   the project id
+     * @param project   the project id
      * @param variableKey the variable key
      * @return the response {@link Variable}
      */
-    public Variable getVariable(String projectId, String variableKey) {
-        Objects.requireNonNull(projectId, "projectId is required");
+    public Variable getVariable(String project, String variableKey) {
+        Objects.requireNonNull(project, "project is required");
         Objects.requireNonNull(variableKey, "variableKey is required");
 
-        return Variable.get(MAPPER, PROJECTS_URLS + projectId + "/variables/" + variableKey, token);
+        return Variable.get(MAPPER, PROJECTS_URLS + project + "/variables/" + variableKey, token);
     }
 
     /**
@@ -158,12 +158,12 @@ public final class ProjectAdministration {
      * similarly to git show-ref, with each returned object containing a ref field with the ref's name,
      * and an object containing the associated commit ID.
      *
-     * @param projectId the project id
+     * @param project the project id
      * @return the list of refs/*
      */
-    public List<Map<String, Object>> getRepositoryRefs(String projectId) {
-        Objects.requireNonNull(projectId, "projectId is required");
-        return Repository.refs(MAPPER, PROJECTS_URLS + projectId + "/git/refs", token);
+    public List<Map<String, Object>> getRepositoryRefs(String project) {
+        Objects.requireNonNull(project, "project is required");
+        return Repository.refs(MAPPER, PROJECTS_URLS + project + "/git/refs", token);
     }
 
     /**
@@ -174,14 +174,14 @@ public final class ProjectAdministration {
      * The commit represented by a parent ID can be retrieved using this endpoint,
      * while the tree state represented by this commit can be retrieved using the Get a tree object endpoint.
      *
-     * @param projectId the project id
+     * @param project the project id
      * @param commit    the commit hash
      * @return the {@link Commit}
      */
-    public Commit getRepositoryCommit(String projectId, String commit) {
-        Objects.requireNonNull(projectId, "projectId is required");
+    public Commit getRepositoryCommit(String project, String commit) {
+        Objects.requireNonNull(project, "project is required");
         Objects.requireNonNull(commit, "commit is required");
-        return Commit.get(MAPPER, PROJECTS_URLS + projectId + "/git/commits/" + commit, token);
+        return Commit.get(MAPPER, PROJECTS_URLS + project + "/git/commits/" + commit, token);
     }
 
     /**
