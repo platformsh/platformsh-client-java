@@ -1,5 +1,11 @@
 package sh.platform.client.project;
 
+import com.fasterxml.jackson.databind.json.JsonMapper;
+import org.apache.http.client.methods.HttpGet;
+import sh.platform.client.AuthToken;
+import sh.platform.client.PlatformClient;
+import sh.platform.client.util.HttpClientExecutor;
+
 public class Blob {
 
     private String sha;
@@ -10,6 +16,8 @@ public class Blob {
 
     private String content;
 
+    Blob() {
+    }
 
     public String getSha() {
         return sha;
@@ -35,5 +43,12 @@ public class Blob {
                 ", encoding='" + encoding + '\'' +
                 ", content='" + content + '\'' +
                 '}';
+    }
+
+    static Blob get(JsonMapper mapper, String url, AuthToken token) {
+        HttpGet request = new HttpGet(url);
+        request.addHeader(PlatformClient.JSON_HEADER);
+        request.addHeader("Authorization", token.getAuthorization());
+        return HttpClientExecutor.request(request, mapper, Blob.class);
     }
 }

@@ -193,5 +193,8 @@ public final class ProjectAdministration {
      * @return the {@link Blob}
      */
     public Blob getRepositoryBlob(String project, String blob) {
+        Objects.requireNonNull(project, "project is required");
+        Objects.requireNonNull(blob, "blob is required");
+        return Blob.get(MAPPER, PROJECTS_URLS + project + "/git/blobs/" + blob, token);
     }
 }

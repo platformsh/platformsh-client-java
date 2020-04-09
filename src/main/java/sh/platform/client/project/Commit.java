@@ -44,6 +44,9 @@ public class Commit {
         return Collections.unmodifiableList(parents);
     }
 
+    Commit() {
+    }
+
     @Override
     public String toString() {
         return "Commit{" +
@@ -55,7 +58,7 @@ public class Commit {
                 '}';
     }
 
-    public static Commit get(JsonMapper mapper, String url, AuthToken token) {
+    static Commit get(JsonMapper mapper, String url, AuthToken token) {
         HttpGet request = new HttpGet(url);
         request.addHeader(PlatformClient.JSON_HEADER);
         request.addHeader("Authorization", token.getAuthorization());

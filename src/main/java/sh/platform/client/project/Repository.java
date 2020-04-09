@@ -15,7 +15,7 @@ final class Repository {
     private Repository() {
     }
 
-    public static List<Map<String, Object>> refs(JsonMapper mapper, String url, AuthToken token) {
+    static List<Map<String, Object>> refs(JsonMapper mapper, String url, AuthToken token) {
         HttpGet request = new HttpGet(url);
         request.addHeader(PlatformClient.JSON_HEADER);
         request.addHeader("Authorization", token.getAuthorization());

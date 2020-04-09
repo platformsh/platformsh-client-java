@@ -78,6 +78,9 @@ public class Project {
     @JsonProperty
     private Map<String, Object> integrations;
 
+    Project() {
+    }
+
     public String getId() {
         return id;
     }
