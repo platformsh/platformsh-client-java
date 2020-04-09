@@ -17,16 +17,22 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static sh.platform.client.PlatformClientTest.PROJECT_ID;
-import static sh.platform.client.PlatformClientTest.TOKEN;
 
 class ProjectAdministrationTest {
 
-    private static final String PROJECT = "5pjgfuplukffs";
-    public static final String VARIABLE_KEY = "test-api-key";
-    private PlatformClient client = new PlatformClient(TOKEN);
+    private static final String PROJECT;
+    private static final String TOKEN;
+    private static final String VARIABLE_KEY = "test-api-key";
 
     private ProjectAdministration projectAdministration;
+
+    static {
+        ConfigurationUtil util = ConfigurationUtil.INSTANCE;
+        PROJECT = util.get(TestProperties.PROJECT);
+        TOKEN = util.get(TestProperties.TOKEN);
+    }
+
+    private PlatformClient client = new PlatformClient(TOKEN);
 
     @BeforeEach
     public void init() {
@@ -41,14 +47,14 @@ class ProjectAdministrationTest {
 
     @Test
     public void shouldGetProject() {
-        Optional<Project> project = projectAdministration.getProject(PROJECT_ID);
+        Optional<Project> project = projectAdministration.getProject(PROJECT);
         assertNotNull(project);
         Assertions.assertTrue(project.isPresent());
     }
 
     @Test
     public void shouldCleanBuildCache() {
-        ProjectResponse project = projectAdministration.clearProjectBuildCache(PROJECT_ID);
+        ProjectResponse project = projectAdministration.clearProjectBuildCache(PROJECT);
         assertNotNull(project);
         assertEquals(HttpStatus.SC_OK, project.getCode());
         assertEquals("OK", project.getStatus());

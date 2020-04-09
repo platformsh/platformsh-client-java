@@ -16,7 +16,6 @@ public enum  ConfigurationUtil {
 
     INSTANCE;
 
-    private static final Logger LOGGER = Logger.getLogger(ConfigurationUtil.class.getName());
 
     private Map<String, String> settings;
 
@@ -36,10 +35,11 @@ public enum  ConfigurationUtil {
     }
 
     private Map<String, String> loadFromFile() {
-        LOGGER.info("Check the test file");
-        final InputStream stream = ConfigurationUtil.class.getResourceAsStream("test.properties");
+        Logger logger = Logger.getLogger(ConfigurationUtil.class.getName());
+        logger.info("Check the test file");
+        final InputStream stream = ConfigurationUtil.class.getClassLoader().getResourceAsStream("test.properties");
         if (stream != null) {
-            LOGGER.info("Loading file from test.properties");
+            logger.info("Loading file from test.properties");
             try {
                 Properties properties = new Properties();
                 properties.load(stream);
@@ -53,6 +53,6 @@ public enum  ConfigurationUtil {
 
     private Map<String, String> map(Properties properties) {
         return properties.entrySet().stream()
-                .collect(toMap(k -> k.toString(), v -> v.toString()));
+                .collect(toMap(k -> k.getKey().toString(), v -> v.getValue().toString()));
     }
 }

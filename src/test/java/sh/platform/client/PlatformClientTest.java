@@ -7,8 +7,14 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class PlatformClientTest {
 
-    static final String PROJECT_ID = "2wyp5ovkhxdfc";
-    static final String TOKEN = "c4627994fbbc0892fe489daacdef5e20fb4aacf7";
+    private static final String PROJECT_ID;
+    private static final String TOKEN;
+
+    static {
+        ConfigurationUtil util = ConfigurationUtil.INSTANCE;
+        PROJECT_ID = util.get(TestProperties.PROJECT);
+        TOKEN = util.get(TestProperties.TOKEN);
+    }
 
     @Test
     public void shouldStartClient() {
