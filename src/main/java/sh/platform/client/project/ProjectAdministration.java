@@ -129,7 +129,7 @@ public final class ProjectAdministration {
     /**
      * Delete a single user-defined project variable.
      *
-     * @param project   the project id
+     * @param project     the project id
      * @param variableKey the variable key
      * @return the response status
      */
@@ -142,7 +142,7 @@ public final class ProjectAdministration {
     /**
      * Retrieve a single user-defined project variable.
      *
-     * @param project   the project id
+     * @param project     the project id
      * @param variableKey the variable key
      * @return the response {@link Variable}
      */
@@ -172,28 +172,54 @@ public final class ProjectAdministration {
      * must be a full ref id, rather than a matching pattern.
      * NOTE: The {repositoryRefId} must be properly escaped.
      * That is, the ref refs/heads/master is accessible via /projects/{projectId}/git/refs/heads%2Fmaster.
+     *
      * @param project the project id
-     * @param ref the ref properly escaped.
+     * @param ref     the ref properly escaped.
      * @return the ref
      */
     public Map<String, Object> getRepositoryRef(String project, String ref) {
         Objects.requireNonNull(project, "project is required");
         Objects.requireNonNull(ref, "ref is required");
-        return Repository.ref(MAPPER, PROJECTS_URLS + project + "/git/refs/"+ ref, token);
+        return Repository.ref(MAPPER, PROJECTS_URLS + project + "/git/refs/" + ref, token);
+    }
+
+    /**
+     * Retrieve the list of integrations
+     *
+     * @param project the project id
+     * @return the list of integration
+     * @throws NullPointerException when project is null
+     */
+    public List<Map<String, Object>> getRepositoryIntegrations(String project) {
+        Objects.requireNonNull(project, "project is required");
+        return Repository.refs(MAPPER, PROJECTS_URLS + project + "/integrations", token);
+    }
+
+    /**
+     * Retrive the integration from the ID
+     * @param project the project id
+     * @param integration the integration id
+     * @return the integration
+     */
+    public Map<String, Object> getRepositoryIntegration(String project, String integration) {
+        Objects.requireNonNull(project, "project is required");
+        Objects.requireNonNull(integration, "integration is required");
+        return Repository.ref(MAPPER, PROJECTS_URLS + project + "/integrations/" + integration, token);
     }
 
     /**
      * Retrieve, by hash, the tree state represented by a commit.
      * The returned object's tree field contains a list of files and directories present in the tree.
-     *
+     * <p>
      * Directories in the tree can be recursively retrieved by this endpoint
      * through their hashes. Files in the tree can be retrieved by the Get a blob object endpoint.
+     *
      * @param project the project id
-     * @param tree the tree id
+     * @param tree    the tree id
      * @return the tree result
      */
     public Map<String, Object> getRepositoryTree(String project, String tree) {
-        return Repository.ref(MAPPER, PROJECTS_URLS + project + "/git/trees/"+ tree, token);
+        return Repository.ref(MAPPER, PROJECTS_URLS + project + "/git/trees/" + tree, token);
     }
 
     /**
@@ -205,7 +231,7 @@ public final class ProjectAdministration {
      * while the tree state represented by this commit can be retrieved using the Get a tree object endpoint.
      *
      * @param project the project id
-     * @param commit    the commit hash
+     * @param commit  the commit hash
      * @return the {@link Commit}
      */
     public Commit getRepositoryCommit(String project, String commit) {
@@ -218,8 +244,9 @@ public final class ProjectAdministration {
      * Retrieve, by hash, an object representing a blob in the repository backing a project. This endpoint allows direct
      * read-only access to the contents of files in a repo. It returns the file in the content
      * field of the response object, encoded according to the format in the encoding field, e.g. base64.
+     *
      * @param project the project id
-     * @param blob the blob id
+     * @param blob    the blob id
      * @return the {@link Blob}
      */
     public Blob getRepositoryBlob(String project, String blob) {
@@ -227,5 +254,6 @@ public final class ProjectAdministration {
         Objects.requireNonNull(blob, "blob is required");
         return Blob.get(MAPPER, PROJECTS_URLS + project + "/git/blobs/" + blob, token);
     }
+
 
 }

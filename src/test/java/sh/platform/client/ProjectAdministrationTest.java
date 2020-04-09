@@ -29,6 +29,7 @@ class ProjectAdministrationTest {
     private static final String COMMIT;
     private static final String BLOB;
     private static final String TREE;
+    private static final String INTEGRATION;
 
     private ProjectAdministration projectAdministration;
 
@@ -39,6 +40,7 @@ class ProjectAdministrationTest {
         COMMIT = util.get(TestProperties.COMMIT);
         BLOB = util.get(TestProperties.BLOB);
         TREE = util.get(TestProperties.TREE);
+        INTEGRATION = util.get(TestProperties.INTEGRATION);
     }
 
     private PlatformClient client = new PlatformClient(TOKEN);
@@ -168,4 +170,17 @@ class ProjectAdministrationTest {
         Blob blob = projectAdministration.getRepositoryBlob(PROJECT, COMMIT);
         Assertions.assertNotNull(blob);
     }
+
+    @Test
+    public void shouldReturnIntegrations() {
+        List<Map<String, Object>> integrations = projectAdministration.getRepositoryIntegrations(PROJECT);
+        Assertions.assertNotNull(integrations);
+    }
+
+    @Test
+    public void shouldReturnIntegration() {
+        Map<String, Object> integrations = projectAdministration.getRepositoryIntegration(PROJECT, INTEGRATION);
+        Assertions.assertNotNull(integrations);
+    }
+
 }
