@@ -34,4 +34,11 @@ compile group: 'sh.platform', name: 'client', version: '1.0.0'
 Example:
 ```java
 
+String token = "MY_TOKEN";
+PlatformClient client = new PlatformClient(token);
+ProjectAdministration projectAdministration = client.getProjectAdministration();
+Projects projects = projectAdministration.getProjects();
+long count = projects.getCount();
+List<Project> result = projects.getProjects();
+
 ```
