@@ -250,6 +250,48 @@ public final class ProjectAdministration {
     }
 
     /**
+     * Delete a single user-specified domain associated with a project.
+     * @param project the project id
+     * @param domain the domain id
+     * @return {@link ProjectResponse}
+     * @throws NullPointerException when there is null parameter
+     */
+    public ProjectResponse deleteDomain(String project, String domain) {
+        Objects.requireNonNull(project, "project is required");
+        Objects.requireNonNull(domain, "domain is required");
+        return Domains.delete(MAPPER, PROJECTS_URLS + project + "/domains/" + domain, token);
+    }
+
+    /**
+     * Add a single domain to a project. If the ssl field is left blank without
+     * an object containing a PEM-encoded SSL certificate, a certificate will be provisioned for you via Let's Encrypt.
+     * @param project the project id
+     * @param settings the domain settings
+     * @return {@link ProjectResponse}
+     * @throws NullPointerException when there is null parameter
+     */
+    public ProjectResponse createDomain(String project, Map<String, Object> settings) {
+        Objects.requireNonNull(project, "project is required");
+        Objects.requireNonNull(settings, "settings is required");
+        return Domains.create(MAPPER, PROJECTS_URLS + project + "/domains/", token, settings);
+    }
+
+    /**
+     * Update the information associated with a single user-specified domain associated with a project.
+     * @param project the project id
+     * @param domain the domain id
+     * @param settings the domain settings
+     * @return {@link ProjectResponse}
+     * @throws NullPointerException when there is null parameter
+     */
+    public ProjectResponse updateDomain(String project, String domain, Map<String, Object> settings) {
+        Objects.requireNonNull(project, "project is required");
+        Objects.requireNonNull(domain, "domain is required");
+        Objects.requireNonNull(settings, "settings is required");
+        return Domains.update(MAPPER, PROJECTS_URLS + project + "/domains/" + domain, token, settings);
+    }
+
+    /**
      * Create a third-integration
      *
      * @param project the project
