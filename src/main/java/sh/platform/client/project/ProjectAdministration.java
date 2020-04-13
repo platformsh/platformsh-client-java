@@ -197,7 +197,8 @@ public final class ProjectAdministration {
 
     /**
      * Retrive the integration from the ID
-     * @param project the project id
+     *
+     * @param project     the project id
      * @param integration the integration id
      * @return the integration
      */
@@ -209,7 +210,8 @@ public final class ProjectAdministration {
 
     /**
      * Deletes the integration
-     * @param project the project id
+     *
+     * @param project     the project id
      * @param integration the integration id
      * @return the {@link ProjectResponse}
      */
@@ -221,8 +223,9 @@ public final class ProjectAdministration {
 
     /**
      * Create a third-integration
+     *
      * @param project the project
-     * @param third the third configuration as map
+     * @param third   the third configuration as map
      * @return the {@link ProjectResponse}
      */
     public ProjectResponse createIntegration(String project, Map<String, Object> third) {
@@ -231,7 +234,14 @@ public final class ProjectAdministration {
         return Integrations.create(MAPPER, PROJECTS_URLS + project + "/integrations/", token, third);
     }
 
-
+    /**
+     * Updates the integration
+     *
+     * @param project     the project id
+     * @param integration the integration id
+     * @param third       the third configurations
+     * @return the {@link ProjectResponse}
+     */
     public ProjectResponse updateIntegration(String project, String integration, Map<String, Object> third) {
         Objects.requireNonNull(project, "project is required");
         Objects.requireNonNull(integration, "integration is required");
