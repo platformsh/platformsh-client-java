@@ -197,4 +197,29 @@ class ProjectAdministrationTest {
         assertEquals(HttpStatus.SC_OK, status.getCode());
     }
 
+    //
+    @Test
+    public void shouldReturnDomains() {
+        List<Map<String, Object>> domains = projectAdministration.getDomains(PROJECT);
+        Assertions.assertNotNull(domains);
+    }
+
+    @Test
+    public void shouldReturnDomain() {
+        Map<String, Object> integrations = projectAdministration.getRepositoryIntegration(PROJECT, INTEGRATION);
+        Assertions.assertNotNull(integrations);
+    }
+
+    @Test
+    public void shouldDeleteDomain() {
+        final ProjectResponse status = projectAdministration.deleteIntegration(PROJECT, INTEGRATION);
+        assertEquals(HttpStatus.SC_OK, status.getCode());
+    }
+
+    @Test
+    public void shouldCreateDomain() {
+        Map<String, Object> third = new HashMap<>();
+        final ProjectResponse status = projectAdministration.createIntegration(PROJECT, third);
+        assertEquals(HttpStatus.SC_OK, status.getCode());
+    }
 }

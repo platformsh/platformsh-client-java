@@ -222,6 +222,34 @@ public final class ProjectAdministration {
     }
 
     /**
+     * Retrieve a list of objects representing the user-specified domains associated with a project.
+     * Note that this does not return the domains automatically assigned to a project that appear under
+     * "Access site" on the user interface.
+     *
+     * @param project the project id
+     * @return the domains from the project
+     * @throws NullPointerException when project id null
+     */
+    public List<Map<String, Object>> getDomains(String project) {
+        Objects.requireNonNull(project, "project is required");
+        return Domains.getDomains(MAPPER, PROJECTS_URLS + project + "/domains/", token);
+    }
+
+    /**
+     * Retrieve information about a single user-specified domain associated with a project.
+     *
+     * @param project the project id
+     * @param domain  the domain id
+     * @return the Domain information
+     * @throws NullPointerException when there is null parameter
+     */
+    public Map<String, Object> getDomain(String project, String domain) {
+        Objects.requireNonNull(project, "project is required");
+        Objects.requireNonNull(domain, "domain is required");
+        return Domains.getDomain(MAPPER, PROJECTS_URLS + project + "/domains/" + domain, token);
+    }
+
+    /**
      * Create a third-integration
      *
      * @param project the project
@@ -297,6 +325,5 @@ public final class ProjectAdministration {
         Objects.requireNonNull(blob, "blob is required");
         return Blob.get(MAPPER, PROJECTS_URLS + project + "/git/blobs/" + blob, token);
     }
-
 
 }
