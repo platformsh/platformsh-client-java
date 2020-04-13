@@ -208,6 +208,39 @@ public final class ProjectAdministration {
     }
 
     /**
+     * Deletes the integration
+     * @param project the project id
+     * @param integration the integration id
+     * @return the {@link ProjectResponse}
+     */
+    public ProjectResponse deleteIntegration(String project, String integration) {
+        Objects.requireNonNull(project, "project is required");
+        Objects.requireNonNull(integration, "integration is required");
+        return Integrations.delete(MAPPER, PROJECTS_URLS + project + "/integrations/" + integration, token);
+    }
+
+    /**
+     * Create a third-integration
+     * @param project the project
+     * @param third the third configuration as map
+     * @return the {@link ProjectResponse}
+     */
+    public ProjectResponse createIntegration(String project, Map<String, Object> third) {
+        Objects.requireNonNull(project, "project is required");
+        Objects.requireNonNull(third, "third is required");
+        return Integrations.create(MAPPER, PROJECTS_URLS + project + "/integrations/", token, third);
+    }
+
+
+    public ProjectResponse updateIntegration(String project, String integration, Map<String, Object> third) {
+        Objects.requireNonNull(project, "project is required");
+        Objects.requireNonNull(integration, "integration is required");
+        Objects.requireNonNull(third, "third is required");
+        return Integrations.update(MAPPER, PROJECTS_URLS + project + "/integrations/" + integration, token, third);
+    }
+
+
+    /**
      * Retrieve, by hash, the tree state represented by a commit.
      * The returned object's tree field contains a list of files and directories present in the tree.
      * <p>

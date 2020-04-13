@@ -14,6 +14,7 @@ import sh.platform.client.project.Projects;
 import sh.platform.client.project.Variable;
 import sh.platform.client.project.VariableBuilder;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -181,6 +182,19 @@ class ProjectAdministrationTest {
     public void shouldReturnIntegration() {
         Map<String, Object> integrations = projectAdministration.getRepositoryIntegration(PROJECT, INTEGRATION);
         Assertions.assertNotNull(integrations);
+    }
+
+    @Test
+    public void shouldDeleteIntegration() {
+        final ProjectResponse status = projectAdministration.deleteIntegration(PROJECT, INTEGRATION);
+        assertEquals(HttpStatus.SC_OK, status.getCode());
+    }
+
+    @Test
+    public void shouldCreateIntegration() {
+        Map<String, Object> third = new HashMap<>();
+        final ProjectResponse status = projectAdministration.createIntegration(PROJECT, third);
+        assertEquals(HttpStatus.SC_OK, status.getCode());
     }
 
 }
