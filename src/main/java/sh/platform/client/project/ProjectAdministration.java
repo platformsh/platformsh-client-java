@@ -337,7 +337,7 @@ public final class ProjectAdministration {
 
     /**
      * Retrieve, by hash, an object representing a commit in the repository backing a project.
-     * This endpoint functions similarly to git cat-file -p <commit-id>. The returned object contains the
+     * This endpoint functions similarly to git cat-file -p commit-id. The returned object contains the
      * hash of the Git tree that it belongs to, as well as the ID of parent commits.
      * <p>
      * The commit represented by a parent ID can be retrieved using this endpoint,
