@@ -6,7 +6,7 @@ public enum Variables implements Supplier<String> {
 
     PROJECT("project.id"),
     COMBO("project.combo"),
-    TOKEN("project.token"),
+    TOKEN("user.token"),
     COMMIT("project.commit"),
     BLOB("project.blog"),
     TREE("project.tree"),

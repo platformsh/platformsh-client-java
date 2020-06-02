@@ -10,7 +10,7 @@ public class PlatformClientTest {
     private static final String TOKEN;
 
     static {
-        TOKEN = PropertiesReader.INSTANCE.get("user.token");
+        TOKEN = PropertiesReader.INSTANCE.get(Variables.TOKEN);
     }
 
     @Test

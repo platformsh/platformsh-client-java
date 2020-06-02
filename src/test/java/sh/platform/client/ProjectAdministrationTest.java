@@ -35,12 +35,13 @@ class ProjectAdministrationTest {
     private ProjectAdministration projectAdministration;
 
     static {
-        PROJECT = PropertiesReader.INSTANCE.get(Variables.PROJECT);
-        TOKEN = PropertiesReader.INSTANCE.get(Variables.TOKEN);
-        COMMIT = PropertiesReader.INSTANCE.get(Variables.COMMIT);
-        BLOB = PropertiesReader.INSTANCE.get(Variables.BLOB);
-        TREE = PropertiesReader.INSTANCE.get(Variables.TREE);
-        INTEGRATION = PropertiesReader.INSTANCE.get(Variables.INTEGRATION);
+        final PropertiesReader reader = PropertiesReader.INSTANCE;
+        PROJECT = reader.get(Variables.PROJECT);
+        TOKEN = reader.get(Variables.TOKEN);
+        COMMIT = reader.get(Variables.COMMIT);
+        BLOB = reader.get(Variables.BLOB);
+        TREE = reader.get(Variables.TREE);
+        INTEGRATION = reader.get(Variables.INTEGRATION);
     }
 
     private PlatformClient client = new PlatformClient(TOKEN);
@@ -58,9 +59,22 @@ class ProjectAdministrationTest {
 
     @Test
     public void shouldGetProject() {
-        Optional<Project> project = projectAdministration.getProject(PROJECT);
-        assertNotNull(project);
-        Assertions.assertTrue(project.isPresent());
+        Projects projects = projectAdministration.getProjects();
+        if (projects.getCount() > 0) {
+            final String id = projects.getProjects().stream().map(Project::getId)
+                    .findFirst()
+                    .orElse("id");
+            Optional<Project> project = projectAdministration.getProject(id);
+            assertNotNull(project);
+            Assertions.assertTrue(project.isPresent());
+        }
+    }
+
+    @Test
+    public void shouldReturnNotFoundWhenProjectDoesNotExist() {
+        Optional<Project> project = projectAdministration.getProject("d6mgc635zl111");
+        Assertions.assertFalse(project.isPresent());
+
     }
 
     @Test

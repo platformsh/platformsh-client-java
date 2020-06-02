@@ -11,6 +11,7 @@ import sh.platform.client.util.HttpClientExecutor;
 
 import java.time.ZonedDateTime;
 import java.util.Map;
+import java.util.Optional;
 
 import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL;
 
@@ -183,6 +184,8 @@ public class Project {
         request.addHeader(PlatformClient.JSON_HEADER);
         request.addHeader("Authorization", token.getAuthorization());
         return HttpClientExecutor.request(request, mapper, Project.class);
+
+
     }
 }
 

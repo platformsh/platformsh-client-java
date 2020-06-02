@@ -3,11 +3,14 @@ package sh.platform.client.project;
 import sh.platform.client.AuthToken;
 import sh.platform.client.AuthUser;
 import sh.platform.client.PlatformClient;
+import sh.platform.client.PlatformClientException;
 
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import static sh.platform.client.PlatformClient.MAPPER;
 
@@ -16,6 +19,7 @@ import static sh.platform.client.PlatformClient.MAPPER;
  */
 public final class ProjectAdministration {
 
+    private static final Logger LOGGER = Logger.getLogger(ProjectAdministration.class.getName());
 
     private final AuthUser user;
 
@@ -30,7 +34,7 @@ public final class ProjectAdministration {
     public ProjectAdministration(AuthUser user, AuthToken token, String serviceURL) {
         this.user = user;
         this.token = token;
-        this.projectUrl = serviceURL  + "projects/";
+        this.projectUrl = serviceURL + "projects/";
     }
 
     /**
@@ -51,7 +55,13 @@ public final class ProjectAdministration {
      */
     public Optional<Project> getProject(String project) {
         Objects.requireNonNull(project, "project is required");
-        return Optional.ofNullable(Project.of(MAPPER, projectUrl + project, token));
+        try {
+            return Optional.of(Project.of(MAPPER, projectUrl + project, token));
+        } catch (PlatformClientException exp) {
+            LOGGER.log(Level.INFO, "Project does not find", exp);
+            return Optional.empty();
+        }
+
     }
 
     /**
@@ -253,8 +263,9 @@ public final class ProjectAdministration {
 
     /**
      * Delete a single user-specified domain associated with a project.
+     *
      * @param project the project id
-     * @param domain the domain id
+     * @param domain  the domain id
      * @return {@link ProjectResponse}
      * @throws NullPointerException when there is null parameter
      */
@@ -267,7 +278,8 @@ public final class ProjectAdministration {
     /**
      * Add a single domain to a project. If the ssl field is left blank without
      * an object containing a PEM-encoded SSL certificate, a certificate will be provisioned for you via Let's Encrypt.
-     * @param project the project id
+     *
+     * @param project  the project id
      * @param settings the domain settings
      * @return {@link ProjectResponse}
      * @throws NullPointerException when there is null parameter
@@ -280,8 +292,9 @@ public final class ProjectAdministration {
 
     /**
      * Update the information associated with a single user-specified domain associated with a project.
-     * @param project the project id
-     * @param domain the domain id
+     *
+     * @param project  the project id
+     * @param domain   the domain id
      * @param settings the domain settings
      * @return {@link ProjectResponse}
      * @throws NullPointerException when there is null parameter
