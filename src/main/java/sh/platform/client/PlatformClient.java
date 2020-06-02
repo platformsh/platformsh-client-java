@@ -29,17 +29,18 @@ public class PlatformClient {
 
     private final ProjectAdministration projectAdministration;
 
-    private final String authUrl = "https://accounts.platform.sh/oauth2/token";
-    private final String serviceURL = "https://api.platform.sh/";
+    private final String authUrl;
+    private final String serviceURL;
 
     public PlatformClient(String token) {
+        this.authUrl = PropertiesReader.INSTANCE.getAuthUrl();
+        this.serviceURL = PropertiesReader.INSTANCE.getServiceUrl();
         this.user = new AuthUser(requireNonNull(token, "token is required"));
         this.token = AuthToken.of(MAPPER, authUrl, user);
         this.projectAdministration = new ProjectAdministration(this.user, this.token, serviceURL);
     }
 
     /**
-     *
      * @return
      */
     public ProjectAdministration getProjectAdministration() {
