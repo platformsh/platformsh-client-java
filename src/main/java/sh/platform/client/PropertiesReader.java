@@ -5,6 +5,7 @@ import java.io.InputStream;
 import java.util.Collections;
 import java.util.Map;
 import java.util.Properties;
+import java.util.function.Supplier;
 
 import static java.util.stream.Collectors.toMap;
 
@@ -38,7 +39,11 @@ enum PropertiesReader {
         return properties.get("service.url");
     }
 
-    public String get(String key) {
+    String get(String key) {
         return properties.get(key);
+    }
+
+    String get(Supplier<String> key) {
+        return properties.get(key.get());
     }
 }
