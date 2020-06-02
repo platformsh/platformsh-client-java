@@ -35,12 +35,12 @@ class ProjectAdministrationTest {
     private ProjectAdministration projectAdministration;
 
     static {
-        PROJECT = PropertiesReader.INSTANCE.get("");
-        TOKEN = PropertiesReader.INSTANCE.get("");
-        COMMIT = PropertiesReader.INSTANCE.get("");
-        BLOB = PropertiesReader.INSTANCE.get("");
-        TREE = PropertiesReader.INSTANCE.get("");
-        INTEGRATION = PropertiesReader.INSTANCE.get("");
+        PROJECT = PropertiesReader.INSTANCE.get(Variables.PROJECT);
+        TOKEN = PropertiesReader.INSTANCE.get(Variables.TOKEN);
+        COMMIT = PropertiesReader.INSTANCE.get(Variables.COMMIT);
+        BLOB = PropertiesReader.INSTANCE.get(Variables.BLOB);
+        TREE = PropertiesReader.INSTANCE.get(Variables.TREE);
+        INTEGRATION = PropertiesReader.INSTANCE.get(Variables.INTEGRATION);
     }
 
     private PlatformClient client = new PlatformClient(TOKEN);
