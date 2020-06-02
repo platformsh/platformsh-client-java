@@ -37,4 +37,8 @@ enum PropertiesReader {
     public String getServiceUrl() {
         return properties.get("service.url");
     }
+
+    public String get(String key) {
+        return properties.get(key);
+    }
 }

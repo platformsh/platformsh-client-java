@@ -11,9 +11,8 @@ public class PlatformClientTest {
     private static final String TOKEN;
 
     static {
-        ConfigurationUtil util = ConfigurationUtil.INSTANCE;
-        PROJECT_ID = util.get(TestProperties.PROJECT);
-        TOKEN = util.get(TestProperties.TOKEN);
+        PROJECT_ID = PropertiesReader.INSTANCE.get("project.id");
+        TOKEN = PropertiesReader.INSTANCE.get("user.token");
     }
 
     @Test
