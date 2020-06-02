@@ -10,25 +10,27 @@ import java.util.Objects;
 import java.util.Optional;
 
 import static sh.platform.client.PlatformClient.MAPPER;
-import static sh.platform.client.PlatformClient.SERVICE_URL;
 
 /**
  * It handles the API to project administration.
  */
 public final class ProjectAdministration {
 
-    private static final String PROJECTS_URLS = SERVICE_URL + "projects/";
+
     private final AuthUser user;
 
     private final AuthToken token;
+
+    private final String projectUrl;
 
     @Deprecated
     /**
      * Use {@link PlatformClient#getProjectAdministration()} instead.
      */
-    public ProjectAdministration(AuthUser user, AuthToken token) {
+    public ProjectAdministration(AuthUser user, AuthToken token, String serviceURL) {
         this.user = user;
         this.token = token;
+        this.projectUrl = serviceURL  + "projects/";
     }
 
     /**
@@ -37,7 +39,7 @@ public final class ProjectAdministration {
      * @return the {@link Projects}
      */
     public Projects getProjects() {
-        return Projects.of(MAPPER, PROJECTS_URLS, token);
+        return Projects.of(MAPPER, projectUrl, token);
     }
 
     /**
@@ -49,7 +51,7 @@ public final class ProjectAdministration {
      */
     public Optional<Project> getProject(String project) {
         Objects.requireNonNull(project, "project is required");
-        return Optional.ofNullable(Project.of(MAPPER, PROJECTS_URLS + project, token));
+        return Optional.ofNullable(Project.of(MAPPER, projectUrl + project, token));
     }
 
     /**
@@ -63,7 +65,7 @@ public final class ProjectAdministration {
      */
     public ProjectResponse clearProjectBuildCache(String project) {
         Objects.requireNonNull(project, "project is required");
-        return ProjectResponse.cleanCache(MAPPER, PROJECTS_URLS + project + "/clear_build_cache", token);
+        return ProjectResponse.cleanCache(MAPPER, projectUrl + project + "/clear_build_cache", token);
     }
 
     /**
@@ -75,7 +77,7 @@ public final class ProjectAdministration {
      */
     public ProjectCreateBuilder create(String title) {
         Objects.requireNonNull(title, "title is required");
-        return new ProjectCreateBuilder(PROJECTS_URLS, title, token, MAPPER);
+        return new ProjectCreateBuilder(projectUrl, title, token, MAPPER);
     }
 
     /**
@@ -87,7 +89,7 @@ public final class ProjectAdministration {
      */
     public ProjectBuilder update(String project) {
         Objects.requireNonNull(project, "project is required");
-        return new ProjectBuilder(PROJECTS_URLS + project, token, MAPPER);
+        return new ProjectBuilder(projectUrl + project, token, MAPPER);
     }
 
     /**
@@ -99,7 +101,7 @@ public final class ProjectAdministration {
      */
     public ProjectResponse delete(String project) {
         Objects.requireNonNull(project, "project is required");
-        return ProjectResponse.delete(MAPPER, PROJECTS_URLS + project, token);
+        return ProjectResponse.delete(MAPPER, projectUrl + project, token);
     }
 
 
@@ -111,7 +113,7 @@ public final class ProjectAdministration {
      */
     public List<Variable> getVariables(String project) {
         Objects.requireNonNull(project, "project is required");
-        return Variable.list(MAPPER, PROJECTS_URLS + project + "/variables/", token);
+        return Variable.list(MAPPER, projectUrl + project + "/variables/", token);
     }
 
     /**
@@ -123,7 +125,7 @@ public final class ProjectAdministration {
      */
     public VariableBuilder variable(String project) {
         Objects.requireNonNull(project, "project is required");
-        return new VariableBuilder(MAPPER, PROJECTS_URLS + project + "/variables/", token);
+        return new VariableBuilder(MAPPER, projectUrl + project + "/variables/", token);
     }
 
     /**
@@ -136,7 +138,7 @@ public final class ProjectAdministration {
     public ProjectResponse delete(String project, String variableKey) {
         Objects.requireNonNull(project, "project is required");
         Objects.requireNonNull(variableKey, "variableKey is required");
-        return ProjectResponse.delete(MAPPER, PROJECTS_URLS + project + "/variables/" + variableKey, token);
+        return ProjectResponse.delete(MAPPER, projectUrl + project + "/variables/" + variableKey, token);
     }
 
     /**
@@ -150,7 +152,7 @@ public final class ProjectAdministration {
         Objects.requireNonNull(project, "project is required");
         Objects.requireNonNull(variableKey, "variableKey is required");
 
-        return Variable.get(MAPPER, PROJECTS_URLS + project + "/variables/" + variableKey, token);
+        return Variable.get(MAPPER, projectUrl + project + "/variables/" + variableKey, token);
     }
 
     /**
@@ -163,7 +165,7 @@ public final class ProjectAdministration {
      */
     public List<Map<String, Object>> getRepositoryRefs(String project) {
         Objects.requireNonNull(project, "project is required");
-        return Repository.refs(MAPPER, PROJECTS_URLS + project + "/git/refs", token);
+        return Repository.refs(MAPPER, projectUrl + project + "/git/refs", token);
     }
 
     /**
@@ -180,7 +182,7 @@ public final class ProjectAdministration {
     public Map<String, Object> getRepositoryRef(String project, String ref) {
         Objects.requireNonNull(project, "project is required");
         Objects.requireNonNull(ref, "ref is required");
-        return Repository.ref(MAPPER, PROJECTS_URLS + project + "/git/refs/" + ref, token);
+        return Repository.ref(MAPPER, projectUrl + project + "/git/refs/" + ref, token);
     }
 
     /**
@@ -192,7 +194,7 @@ public final class ProjectAdministration {
      */
     public List<Map<String, Object>> getRepositoryIntegrations(String project) {
         Objects.requireNonNull(project, "project is required");
-        return Repository.refs(MAPPER, PROJECTS_URLS + project + "/integrations", token);
+        return Repository.refs(MAPPER, projectUrl + project + "/integrations", token);
     }
 
     /**
@@ -205,7 +207,7 @@ public final class ProjectAdministration {
     public Map<String, Object> getRepositoryIntegration(String project, String integration) {
         Objects.requireNonNull(project, "project is required");
         Objects.requireNonNull(integration, "integration is required");
-        return Repository.ref(MAPPER, PROJECTS_URLS + project + "/integrations/" + integration, token);
+        return Repository.ref(MAPPER, projectUrl + project + "/integrations/" + integration, token);
     }
 
     /**
@@ -218,7 +220,7 @@ public final class ProjectAdministration {
     public ProjectResponse deleteIntegration(String project, String integration) {
         Objects.requireNonNull(project, "project is required");
         Objects.requireNonNull(integration, "integration is required");
-        return Integrations.delete(MAPPER, PROJECTS_URLS + project + "/integrations/" + integration, token);
+        return Integrations.delete(MAPPER, projectUrl + project + "/integrations/" + integration, token);
     }
 
     /**
@@ -232,7 +234,7 @@ public final class ProjectAdministration {
      */
     public List<Map<String, Object>> getDomains(String project) {
         Objects.requireNonNull(project, "project is required");
-        return Domains.getDomains(MAPPER, PROJECTS_URLS + project + "/domains/", token);
+        return Domains.getDomains(MAPPER, projectUrl + project + "/domains/", token);
     }
 
     /**
@@ -246,7 +248,7 @@ public final class ProjectAdministration {
     public Map<String, Object> getDomain(String project, String domain) {
         Objects.requireNonNull(project, "project is required");
         Objects.requireNonNull(domain, "domain is required");
-        return Domains.getDomain(MAPPER, PROJECTS_URLS + project + "/domains/" + domain, token);
+        return Domains.getDomain(MAPPER, projectUrl + project + "/domains/" + domain, token);
     }
 
     /**
@@ -259,7 +261,7 @@ public final class ProjectAdministration {
     public ProjectResponse deleteDomain(String project, String domain) {
         Objects.requireNonNull(project, "project is required");
         Objects.requireNonNull(domain, "domain is required");
-        return Domains.delete(MAPPER, PROJECTS_URLS + project + "/domains/" + domain, token);
+        return Domains.delete(MAPPER, projectUrl + project + "/domains/" + domain, token);
     }
 
     /**
@@ -273,7 +275,7 @@ public final class ProjectAdministration {
     public ProjectResponse createDomain(String project, Map<String, Object> settings) {
         Objects.requireNonNull(project, "project is required");
         Objects.requireNonNull(settings, "settings is required");
-        return Domains.create(MAPPER, PROJECTS_URLS + project + "/domains/", token, settings);
+        return Domains.create(MAPPER, projectUrl + project + "/domains/", token, settings);
     }
 
     /**
@@ -288,7 +290,7 @@ public final class ProjectAdministration {
         Objects.requireNonNull(project, "project is required");
         Objects.requireNonNull(domain, "domain is required");
         Objects.requireNonNull(settings, "settings is required");
-        return Domains.update(MAPPER, PROJECTS_URLS + project + "/domains/" + domain, token, settings);
+        return Domains.update(MAPPER, projectUrl + project + "/domains/" + domain, token, settings);
     }
 
     /**
@@ -301,7 +303,7 @@ public final class ProjectAdministration {
     public ProjectResponse createIntegration(String project, Map<String, Object> third) {
         Objects.requireNonNull(project, "project is required");
         Objects.requireNonNull(third, "third is required");
-        return Integrations.create(MAPPER, PROJECTS_URLS + project + "/integrations/", token, third);
+        return Integrations.create(MAPPER, projectUrl + project + "/integrations/", token, third);
     }
 
     /**
@@ -316,7 +318,7 @@ public final class ProjectAdministration {
         Objects.requireNonNull(project, "project is required");
         Objects.requireNonNull(integration, "integration is required");
         Objects.requireNonNull(third, "third is required");
-        return Integrations.update(MAPPER, PROJECTS_URLS + project + "/integrations/" + integration, token, third);
+        return Integrations.update(MAPPER, projectUrl + project + "/integrations/" + integration, token, third);
     }
 
 
@@ -332,7 +334,7 @@ public final class ProjectAdministration {
      * @return the tree result
      */
     public Map<String, Object> getRepositoryTree(String project, String tree) {
-        return Repository.ref(MAPPER, PROJECTS_URLS + project + "/git/trees/" + tree, token);
+        return Repository.ref(MAPPER, projectUrl + project + "/git/trees/" + tree, token);
     }
 
     /**
@@ -350,7 +352,7 @@ public final class ProjectAdministration {
     public Commit getRepositoryCommit(String project, String commit) {
         Objects.requireNonNull(project, "project is required");
         Objects.requireNonNull(commit, "commit is required");
-        return Commit.get(MAPPER, PROJECTS_URLS + project + "/git/commits/" + commit, token);
+        return Commit.get(MAPPER, projectUrl + project + "/git/commits/" + commit, token);
     }
 
     /**
@@ -365,7 +367,7 @@ public final class ProjectAdministration {
     public Blob getRepositoryBlob(String project, String blob) {
         Objects.requireNonNull(project, "project is required");
         Objects.requireNonNull(blob, "blob is required");
-        return Blob.get(MAPPER, PROJECTS_URLS + project + "/git/blobs/" + blob, token);
+        return Blob.get(MAPPER, projectUrl + project + "/git/blobs/" + blob, token);
     }
 
 }
