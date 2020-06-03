@@ -1,6 +1,7 @@
 package sh.platform.client;
 
 import org.apache.http.HttpStatus;
+import org.apache.http.StatusLine;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
@@ -24,24 +25,16 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 class ProjectAdministrationTest {
 
-    private static final String PROJECT;
     private static final String TOKEN;
     private static final String VARIABLE_KEY = "test-api-key";
-    private static final String COMMIT;
-    private static final String BLOB;
-    private static final String TREE;
     private static final String INTEGRATION;
 
     private ProjectAdministration projectAdministration;
 
     static {
-        ConfigurationUtil util = ConfigurationUtil.INSTANCE;
-        PROJECT = util.get(TestProperties.PROJECT);
-        TOKEN = util.get(TestProperties.TOKEN);
-        COMMIT = util.get(TestProperties.COMMIT);
-        BLOB = util.get(TestProperties.BLOB);
-        TREE = util.get(TestProperties.TREE);
-        INTEGRATION = util.get(TestProperties.INTEGRATION);
+        final PropertiesReader reader = PropertiesReader.INSTANCE;
+        TOKEN = reader.get(Variables.TOKEN);
+        INTEGRATION = reader.get(Variables.INTEGRATION);
     }
 
     private PlatformClient client = new PlatformClient(TOKEN);
@@ -59,14 +52,24 @@ class ProjectAdministrationTest {
 
     @Test
     public void shouldGetProject() {
-        Optional<Project> project = projectAdministration.getProject(PROJECT);
+
+        final String id = getFirstProject().map(Project::getId).orElse("id");
+        Optional<Project> project = projectAdministration.getProject(id);
         assertNotNull(project);
         Assertions.assertTrue(project.isPresent());
     }
 
     @Test
+    public void shouldReturnNotFoundWhenProjectDoesNotExist() {
+        Optional<Project> project = projectAdministration.getProject("d6mgc635zl111");
+        Assertions.assertFalse(project.isPresent());
+
+    }
+
+    @Test
     public void shouldCleanBuildCache() {
-        ProjectResponse project = projectAdministration.clearProjectBuildCache(PROJECT);
+        final String id = getFirstProject().map(Project::getId).orElse("id");
+        ProjectResponse project = projectAdministration.clearProjectBuildCache(id);
         assertNotNull(project);
         assertEquals(HttpStatus.SC_OK, project.getCode());
         assertEquals("OK", project.getStatus());
@@ -75,12 +78,13 @@ class ProjectAdministrationTest {
     @Test
     @Disabled
     public void shouldReturnEmptyWhenThereIsNotProject() {
-        Optional<Project> project = projectAdministration.getProject("not_found");
+        Optional<Project> project = projectAdministration.getProject("d6mgc635zl111");
         assertNotNull(project);
-        Assertions.assertTrue(project.isPresent());
+        Assertions.assertFalse(project.isPresent());
     }
 
     @Test
+    @Disabled
     public void shouldCreateProject() {
         ProjectResponse status = projectAdministration.create("title-sample")
                 .region("eu-3.platform.sh")
@@ -93,14 +97,15 @@ class ProjectAdministrationTest {
 
     @Test
     public void shouldDeleteProject() {
-        ProjectResponse status = projectAdministration.delete(PROJECT);
+        final String id = getFirstProject().map(Project::getId).orElse("id");
+        ProjectResponse status = projectAdministration.delete(id);
         assertEquals(HttpStatus.SC_OK, status.getCode());
-        assertEquals("OK", status.getStatus());
     }
 
     @Test
     public void shouldUpdate() {
-        ProjectResponse status = projectAdministration.update(PROJECT)
+        final String id = getFirstProject().map(Project::getId).orElse("id");
+        ProjectResponse status = projectAdministration.update(id)
                 .withTitle("a title")
                 .withDescription("update the description").update();
         assertEquals(HttpStatus.SC_OK, status.getCode());
@@ -110,116 +115,174 @@ class ProjectAdministrationTest {
 
     @Test
     public void shouldListVariable() {
-        final List<Variable> variables = projectAdministration.getVariables(PROJECT);
+        final String id = getFirstProject().map(Project::getId).orElse("id");
+        final List<Variable> variables = projectAdministration.getVariables(id);
         Assertions.assertNotNull(variables);
-    }
-
-
-    @Test
-    public void shouldCreateVariable() {
-        final VariableBuilder builder = projectAdministration.variable(PROJECT);
-        final ProjectResponse status = builder.name(VARIABLE_KEY).value("a value").create();
-        assertEquals(HttpStatus.SC_CREATED, status.getCode());
     }
 
     @Test
     public void shouldDeleteVariable() {
-        final ProjectResponse status = projectAdministration.delete(PROJECT, VARIABLE_KEY);
+        final String id = getFirstProject().map(Project::getId).orElse("id");
+        final ProjectResponse status = projectAdministration.delete(id, VARIABLE_KEY);
         assertEquals(HttpStatus.SC_OK, status.getCode());
+    }
+
+    @Test
+    public void shouldCreateVariable() {
+        final String id = getFirstProject().map(Project::getId).orElse("id");
+        final VariableBuilder builder = projectAdministration.variable(id);
+
+        final ProjectResponse status = builder.name(VARIABLE_KEY).value("a value").create();
+        assertEquals(HttpStatus.SC_CREATED, status.getCode());
+    }
+
+
+    @Test
+    public void shouldReturnNotFoundWhenDeleteVariableThatDoesNotExist() {
+        final String id = getFirstProject().map(Project::getId).orElse("id");
+        final PlatformClientException exception = Assertions.assertThrows(PlatformClientException.class, () -> projectAdministration.delete(id, VARIABLE_KEY));
+        final StatusLine statusLine = exception.getStatus().get();
+        Assertions.assertEquals(404, statusLine.getStatusCode());
     }
 
     @Test
     public void shouldGetVariable() {
-        final Variable variable = projectAdministration.getVariable(PROJECT, VARIABLE_KEY);
-        Assertions.assertNotNull(variable);
+        final String id = getFirstProject().map(Project::getId).orElse("id");
+        final List<Variable> variables = projectAdministration.getVariables(id);
+        if (!variables.isEmpty()) {
+            final Variable variable = projectAdministration.getVariable(id, variables.get(0).getName());
+            Assertions.assertNotNull(variable);
+        }
+
     }
 
     @Test
     public void shouldUpdateVariable() {
-        final VariableBuilder builder = projectAdministration.variable(PROJECT);
-        final ProjectResponse status = builder.name(VARIABLE_KEY).value("an updated value").update();
-        assertEquals(HttpStatus.SC_OK, status.getCode());
+        final String id = getFirstProject().map(Project::getId).orElse("id");
+        final List<Variable> variables = projectAdministration.getVariables(id);
+        if (!variables.isEmpty()) {
+            final VariableBuilder builder = projectAdministration.variable(id);
+            final ProjectResponse status = builder.name(variables.get(0).getName()).value("an updated value").update();
+            assertEquals(HttpStatus.SC_OK, status.getCode());
+        }
+
     }
 
     @Test
     public void shouldReturnRefList() {
-        List<Map<String, Object>> refs = projectAdministration.getRepositoryRefs(PROJECT);
+        final String id = getFirstProject().map(Project::getId).orElse("id");
+        List<Map<String, Object>> refs = projectAdministration.getRepositoryRefs(id);
         Assertions.assertNotNull(refs);
     }
 
     @Test
     public void shouldReturnRef() {
-        Map<String, Object> ref = projectAdministration.getRepositoryRef(PROJECT, "heads%2Fmaster");
+        final String id = getFirstProject().map(Project::getId).orElse("id");
+        Map<String, Object> ref = projectAdministration.getRepositoryRef(id, "heads%2Fmaster");
         Assertions.assertNotNull(ref);
     }
 
     @Test
+    @Disabled
     public void shouldReturnTree() {
-        Map<String, Object> tree = projectAdministration.getRepositoryTree(PROJECT, "heads%2Fmaster");
-        Assertions.assertNotNull(tree);
+
+        final String id = getFirstProject().map(Project::getId).orElse("id");
+        List<Map<String, Object>> refs = projectAdministration.getRepositoryRefs(id);
+        if(!refs.isEmpty()) {
+            final Map<String, Object> map = refs.get(0);
+            final Map<String, String> object = (Map<String, String>) map.get("object");
+            Commit commit = projectAdministration.getRepositoryCommit(id, object.get("sha"));
+            Map<String, Object> tree = projectAdministration.getRepositoryTree(id, commit.getTree());
+            Assertions.assertNotNull(tree);
+        }
     }
 
 
     @Test
     public void shouldReturnCommit() {
-        Commit commit = projectAdministration.getRepositoryCommit(PROJECT, COMMIT);
-        Assertions.assertNotNull(commit);
+        final String id = getFirstProject().map(Project::getId).orElse("id");
+        List<Map<String, Object>> refs = projectAdministration.getRepositoryRefs(id);
+        if(!refs.isEmpty()) {
+            final Map<String, Object> map = refs.get(0);
+            final Map<String, String> object = (Map<String, String>) map.get("object");
+            Commit commit = projectAdministration.getRepositoryCommit(id, object.get("sha"));
+            Assertions.assertNotNull(commit);
+        }
+
     }
 
     @Test
+    @Disabled
     public void shouldReturnBlog() {
-        Blob blob = projectAdministration.getRepositoryBlob(PROJECT, COMMIT);
-        Assertions.assertNotNull(blob);
+        final String id = getFirstProject().map(Project::getId).orElse("id");
+        List<Map<String, Object>> refs = projectAdministration.getRepositoryRefs(id);
+        if(!refs.isEmpty()) {
+            final Map<String, Object> map = refs.get(0);
+            final Map<String, String> object = (Map<String, String>) map.get("object");
+            Blob blob = projectAdministration.getRepositoryBlob(id, object.get("sha"));
+            Assertions.assertNotNull(blob);
+        }
     }
 
     @Test
     public void shouldReturnIntegrations() {
-        List<Map<String, Object>> integrations = projectAdministration.getRepositoryIntegrations(PROJECT);
+        final String id = getFirstProject().map(Project::getId).orElse("id");
+        List<Map<String, Object>> integrations = projectAdministration.getRepositoryIntegrations(id);
         Assertions.assertNotNull(integrations);
     }
 
     @Test
     public void shouldReturnIntegration() {
-        Map<String, Object> integrations = projectAdministration.getRepositoryIntegration(PROJECT, INTEGRATION);
-        Assertions.assertNotNull(integrations);
+        final String id = getFirstProject().map(Project::getId).orElse("id");
+        List<Map<String, Object>> integrations = projectAdministration.getRepositoryIntegrations(id);
+        if(!integrations.isEmpty()) {
+            final Map<String, Object> map = integrations.get(0);
+            Map<String, Object> integration = projectAdministration.getRepositoryIntegration(id, map.get("id").toString());
+            Assertions.assertNotNull(integration);
+        }
+
     }
 
     @Test
+    @Disabled
     public void shouldDeleteIntegration() {
-        final ProjectResponse status = projectAdministration.deleteIntegration(PROJECT, INTEGRATION);
-        assertEquals(HttpStatus.SC_OK, status.getCode());
     }
 
     @Test
+    @Disabled
     public void shouldCreateIntegration() {
-        Map<String, Object> third = new HashMap<>();
-        final ProjectResponse status = projectAdministration.createIntegration(PROJECT, third);
-        assertEquals(HttpStatus.SC_OK, status.getCode());
     }
 
-    //
+
     @Test
+    @Disabled
     public void shouldReturnDomains() {
-        List<Map<String, Object>> domains = projectAdministration.getDomains(PROJECT);
+        final String id = getFirstProject().map(Project::getId).orElse("id");
+        List<Map<String, Object>> domains = projectAdministration.getDomains(id);
         Assertions.assertNotNull(domains);
     }
 
     @Test
+    @Disabled
     public void shouldReturnDomain() {
-        Map<String, Object> integrations = projectAdministration.getRepositoryIntegration(PROJECT, INTEGRATION);
-        Assertions.assertNotNull(integrations);
     }
 
     @Test
+    @Disabled
     public void shouldDeleteDomain() {
-        final ProjectResponse status = projectAdministration.deleteIntegration(PROJECT, INTEGRATION);
-        assertEquals(HttpStatus.SC_OK, status.getCode());
     }
 
     @Test
+    @Disabled
     public void shouldCreateDomain() {
-        Map<String, Object> third = new HashMap<>();
-        final ProjectResponse status = projectAdministration.createIntegration(PROJECT, third);
-        assertEquals(HttpStatus.SC_OK, status.getCode());
+    }
+
+
+    private Optional<Project> getFirstProject() {
+        Projects projects = projectAdministration.getProjects();
+        if (projects.getCount() > 0) {
+            return Optional.of(projects.getProjects().get(0));
+        }
+        return Optional.empty();
     }
 }

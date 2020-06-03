@@ -12,8 +12,6 @@ import static java.util.Objects.requireNonNull;
 
 public class PlatformClient {
 
-    private static final String AUTH_URL = "https://accounts.platform.sh/oauth2/token";
-    public static final String SERVICE_URL = "https://api.platform.sh/";
     public static final JsonMapper MAPPER;
     public static final BasicHeader JSON_HEADER = new BasicHeader("Content-Type", "application/json");
 
@@ -31,14 +29,18 @@ public class PlatformClient {
 
     private final ProjectAdministration projectAdministration;
 
+    private final String authUrl;
+    private final String serviceURL;
+
     public PlatformClient(String token) {
+        this.authUrl = PropertiesReader.INSTANCE.getAuthUrl();
+        this.serviceURL = PropertiesReader.INSTANCE.getServiceUrl();
         this.user = new AuthUser(requireNonNull(token, "token is required"));
-        this.token = AuthToken.of(MAPPER, AUTH_URL, user);
-        this.projectAdministration = new ProjectAdministration(this.user, this.token);
+        this.token = AuthToken.of(MAPPER, authUrl, user);
+        this.projectAdministration = new ProjectAdministration(this.user, this.token, serviceURL);
     }
 
     /**
-     *
      * @return
      */
     public ProjectAdministration getProjectAdministration() {
