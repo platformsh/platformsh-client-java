@@ -120,6 +120,12 @@ class ProjectAdministrationTest {
         Assertions.assertNotNull(variables);
     }
 
+    @Test
+    public void shouldDeleteVariable() {
+        final String id = getFirstProject().map(Project::getId).orElse("id");
+        final ProjectResponse status = projectAdministration.delete(id, VARIABLE_KEY);
+        assertEquals(HttpStatus.SC_OK, status.getCode());
+    }
 
     @Test
     public void shouldCreateVariable() {
@@ -130,13 +136,6 @@ class ProjectAdministrationTest {
         assertEquals(HttpStatus.SC_CREATED, status.getCode());
     }
 
-
-    @Test
-    public void shouldDeleteVariable() {
-        final String id = getFirstProject().map(Project::getId).orElse("id");
-        final ProjectResponse status = projectAdministration.delete(id, VARIABLE_KEY);
-        assertEquals(HttpStatus.SC_OK, status.getCode());
-    }
 
     @Test
     public void shouldReturnNotFoundWhenDeleteVariableThatDoesNotExist() {
