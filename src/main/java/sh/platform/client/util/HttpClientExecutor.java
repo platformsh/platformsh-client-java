@@ -63,9 +63,7 @@ public final class HttpClientExecutor {
             StatusLine statusLine = response.getStatusLine();
 
             if (!RESPONSES.contains(statusLine.getStatusCode())) {
-                throw new PlatformClientException("There is an error on the request url " + request.toString()
-                        + " http return: " + statusLine.getStatusCode() + " "
-                        + statusLine.getReasonPhrase());
+                throw new PlatformClientException(statusLine, request.toString());
             }
             String json = EntityUtils.toString(response.getEntity());
             return mapper.readValue(json, type);
@@ -83,9 +81,7 @@ public final class HttpClientExecutor {
         try (CloseableHttpResponse response = getClient().execute(request)) {
             StatusLine statusLine = response.getStatusLine();
             if (!RESPONSES.contains(statusLine.getStatusCode())) {
-                throw new PlatformClientException("There is an error on the request url " + request.toString()
-                        + " http return: " + statusLine.getStatusCode() + " "
-                        + statusLine.getReasonPhrase());
+                throw new PlatformClientException(statusLine, request.toString());
             }
             String json = EntityUtils.toString(response.getEntity());
             return mapper.readValue(json, type);

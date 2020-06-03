@@ -59,15 +59,11 @@ class ProjectAdministrationTest {
 
     @Test
     public void shouldGetProject() {
-        Projects projects = projectAdministration.getProjects();
-        if (projects.getCount() > 0) {
-            final String id = projects.getProjects().stream().map(Project::getId)
-                    .findFirst()
-                    .orElse("id");
-            Optional<Project> project = projectAdministration.getProject(id);
-            assertNotNull(project);
-            Assertions.assertTrue(project.isPresent());
-        }
+
+        final String id = getFirstProject().map(Project::getId).orElse("id");
+        Optional<Project> project = projectAdministration.getProject(id);
+        assertNotNull(project);
+        Assertions.assertTrue(project.isPresent());
     }
 
     @Test
@@ -79,7 +75,8 @@ class ProjectAdministrationTest {
 
     @Test
     public void shouldCleanBuildCache() {
-        ProjectResponse project = projectAdministration.clearProjectBuildCache(PROJECT);
+        final String id = getFirstProject().map(Project::getId).orElse("id");
+        ProjectResponse project = projectAdministration.clearProjectBuildCache(id);
         assertNotNull(project);
         assertEquals(HttpStatus.SC_OK, project.getCode());
         assertEquals("OK", project.getStatus());
@@ -88,12 +85,13 @@ class ProjectAdministrationTest {
     @Test
     @Disabled
     public void shouldReturnEmptyWhenThereIsNotProject() {
-        Optional<Project> project = projectAdministration.getProject("not_found");
+        Optional<Project> project = projectAdministration.getProject("d6mgc635zl111");
         assertNotNull(project);
-        Assertions.assertTrue(project.isPresent());
+        Assertions.assertFalse(project.isPresent());
     }
 
     @Test
+    @Disabled
     public void shouldCreateProject() {
         ProjectResponse status = projectAdministration.create("title-sample")
                 .region("eu-3.platform.sh")
@@ -106,14 +104,15 @@ class ProjectAdministrationTest {
 
     @Test
     public void shouldDeleteProject() {
-        ProjectResponse status = projectAdministration.delete(PROJECT);
+        final String id = getFirstProject().map(Project::getId).orElse("id");
+        ProjectResponse status = projectAdministration.delete(id);
         assertEquals(HttpStatus.SC_OK, status.getCode());
-        assertEquals("OK", status.getStatus());
     }
 
     @Test
     public void shouldUpdate() {
-        ProjectResponse status = projectAdministration.update(PROJECT)
+        final String id = getFirstProject().map(Project::getId).orElse("id");
+        ProjectResponse status = projectAdministration.update(id)
                 .withTitle("a title")
                 .withDescription("update the description").update();
         assertEquals(HttpStatus.SC_OK, status.getCode());
@@ -123,21 +122,33 @@ class ProjectAdministrationTest {
 
     @Test
     public void shouldListVariable() {
-        final List<Variable> variables = projectAdministration.getVariables(PROJECT);
+        final String id = getFirstProject().map(Project::getId).orElse("id");
+        final List<Variable> variables = projectAdministration.getVariables(id);
         Assertions.assertNotNull(variables);
     }
 
 
     @Test
     public void shouldCreateVariable() {
-        final VariableBuilder builder = projectAdministration.variable(PROJECT);
+        final String id = getFirstProject().map(Project::getId).orElse("id");
+        final VariableBuilder builder = projectAdministration.variable(id);
         final ProjectResponse status = builder.name(VARIABLE_KEY).value("a value").create();
         assertEquals(HttpStatus.SC_CREATED, status.getCode());
     }
 
+
+
     @Test
     public void shouldDeleteVariable() {
-        final ProjectResponse status = projectAdministration.delete(PROJECT, VARIABLE_KEY);
+        final String id = getFirstProject().map(Project::getId).orElse("id");
+        final ProjectResponse status = projectAdministration.delete(id, VARIABLE_KEY);
+        assertEquals(HttpStatus.SC_OK, status.getCode());
+    }
+
+    @Test
+    public void shouldReturnNotFoundWhenDeleteVariableThatDoesNotExist() {
+        final String id = getFirstProject().map(Project::getId).orElse("id");
+        final ProjectResponse status = projectAdministration.delete(id, VARIABLE_KEY);
         assertEquals(HttpStatus.SC_OK, status.getCode());
     }
 
@@ -234,5 +245,14 @@ class ProjectAdministrationTest {
         Map<String, Object> third = new HashMap<>();
         final ProjectResponse status = projectAdministration.createIntegration(PROJECT, third);
         assertEquals(HttpStatus.SC_OK, status.getCode());
+    }
+
+
+    private Optional<Project> getFirstProject() {
+        Projects projects = projectAdministration.getProjects();
+        if (projects.getCount() > 0) {
+            return Optional.of(projects.getProjects().get(0));
+        }
+        return Optional.empty();
     }
 }
