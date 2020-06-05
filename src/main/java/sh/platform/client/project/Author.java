@@ -1,7 +1,5 @@
 package sh.platform.client.project;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 import java.time.ZonedDateTime;
 
 public class Author {

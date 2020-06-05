@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.introspect.VisibilityChecker;
 import com.fasterxml.jackson.databind.json.JsonMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.apache.http.message.BasicHeader;
+import sh.platform.client.environment.Environments;
 import sh.platform.client.project.ProjectAdministration;
 
 import static java.util.Objects.requireNonNull;
@@ -24,13 +25,12 @@ public class PlatformClient {
     }
 
     private final AuthUser user;
-
     private final AuthToken token;
-
-    private final ProjectAdministration projectAdministration;
-
     private final String authUrl;
     private final String serviceURL;
+
+    private final ProjectAdministration projectAdministration;
+    private final Environments environments;
 
     public PlatformClient(String token) {
         this.authUrl = PropertiesReader.INSTANCE.getAuthUrl();
@@ -38,12 +38,14 @@ public class PlatformClient {
         this.user = new AuthUser(requireNonNull(token, "token is required"));
         this.token = AuthToken.of(MAPPER, authUrl, user);
         this.projectAdministration = new ProjectAdministration(this.user, this.token, serviceURL);
+        this.environments = new Environments(this.user, this.token, serviceURL);
     }
 
-    /**
-     * @return
-     */
     public ProjectAdministration getProjectAdministration() {
-        return projectAdministration;
+        return this.projectAdministration;
+    }
+
+    public Environments getEnvironments() {
+        return this.environments;
     }
 }

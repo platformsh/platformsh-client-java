@@ -27,14 +27,12 @@ class ProjectAdministrationTest {
 
     private static final String TOKEN;
     private static final String VARIABLE_KEY = "test-api-key";
-    private static final String INTEGRATION;
 
     private ProjectAdministration projectAdministration;
 
     static {
         final PropertiesReader reader = PropertiesReader.INSTANCE;
         TOKEN = reader.get(Variables.TOKEN);
-        INTEGRATION = reader.get(Variables.INTEGRATION);
     }
 
     private PlatformClient client = new PlatformClient(TOKEN);
