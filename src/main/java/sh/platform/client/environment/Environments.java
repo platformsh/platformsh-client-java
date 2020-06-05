@@ -6,6 +6,7 @@ import sh.platform.client.PlatformClient;
 import sh.platform.client.project.ProjectAdministration;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.logging.Logger;
 
@@ -52,7 +53,7 @@ public class Environments {
     public EnvironmentStatus redeploy(String projectId, String environment) {
         Objects.requireNonNull(projectId, "projectId is required");
         Objects.requireNonNull(environment, "environment is required");
-        return null;
+        return EnvironmentStatus.redeploy(MAPPER, environmentsURL + projectId + "/environments/" + environment + "/redeploy");
     }
 
     /**
